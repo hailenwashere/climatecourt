@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div 
+    <div
       className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]"
       style={{
         backgroundImage: "url('/paper-background.jpg')",
@@ -12,7 +12,7 @@ export default function Home() {
         backgroundRepeat: "repeat",
       }}
     >
-      <main className="flex flex-col items-center gap-[32px] mb-auto">
+      <div className="flex flex-col items-center gap-[32px] mb-auto">
         <CourtTitle />
         <PlaintiffVsDefendant />
         <ConfessionBox />
@@ -21,16 +21,16 @@ export default function Home() {
           <BreakingNewsButton />
           <JuryDutyButton />
         </div>
-      </main>
+      </div>
     </div>
   );
 }
 const CourtTitle = () => {
   return (
     <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold text-center">
-        <div className="bg-yellow-400 px-8">CLIMATE</div>
-        <div className="bg-yellow-400 px-8">COURT</div>
-      </div>
+      <div className="bg-yellow-400 px-8">CLIMATE</div>
+      <div className="bg-yellow-400 px-8">COURT</div>
+    </div>
   );
 };
 
@@ -42,15 +42,13 @@ const PlaintiffVsDefendant = () => {
         Plaintiff
       </div>
       <div className="font-bold">vs.</div>
-      <div className="text-left">
+      <div className="text-right">
         YOU, <br />
         Defendant
       </div>
     </div>
   );
 };
-
-
 
 const ConfessionBox = () => {
   const [confession, setConfession] = useState<string>("");
@@ -70,7 +68,7 @@ const ConfessionBox = () => {
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
           placeholder="confess your climate crime.."
-          className="w-full p-20 min-h-[100px] border border-gray-300 rounded-lg bg-white text-2xl font-serif"
+          className="w-full p-20 min-h-[100px] border border-gray-300 rounded-lg bg-white text-2xl font-serif resize-none"
           required
         />
         <button

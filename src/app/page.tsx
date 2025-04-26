@@ -66,7 +66,7 @@ const ConfessionBox = () => {
           type="submit"
           className="btn btn-warning mt-4 px-8 py-3 bg-yellow-400 text-black font-bold hover:bg-yellow-500"
         >
-          Submit to Judgment
+          submit to judgement
         </button>
       </form>
     </div>
@@ -76,7 +76,7 @@ const ConfessionBox = () => {
 const BreakingNewsButton = () => {
   return (
     <button className="btn btn-outline border-2 border-gray-500 mbrounded-md px-8 py-3 w-[300px]">
-      Breaking News
+      breaking news
     </button>
   );
 };
@@ -84,7 +84,7 @@ const BreakingNewsButton = () => {
 const JuryDutyButton = () => {
   return (
     <button className="btn btn-outline border-2 border-gray-500 rounded-md px-8 py-3 w-[300px]">
-      Jury Duty
+      jury duty
     </button>
   );
 };

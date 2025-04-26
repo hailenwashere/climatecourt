@@ -3,9 +3,17 @@ import React, { useState, FormEvent } from "react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]">
+    <div 
+      className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]"
+      style={{
+        backgroundImage: "url('/paper-background.jpg')",
+        backgroundSize: "cover",
+        backgroundRepeat: "repeat",
+      }}
+    >
       <main className="flex flex-col items-center gap-[32px] mb-auto">
-        <CourtHeading />
+        <PlaintiffVsDefendant />
+        <CourtTitle />
         <ConfessionBox />
 
         <div className="flex justify-between w-full max-w-2xl">
@@ -17,22 +25,28 @@ export default function Home() {
   );
 }
 
-const CourtHeading = () => {
+const PlaintiffVsDefendant = () => {
   return (
-    <div className="flex flex-row gap-[128px] items-center">
-      <div className="text-2xl text-right">
+    <div className="flex justify-center items-center w-full gap-8 text-2xl">
+      <div className="text-right">
         THE CLIMATE CONSCIOUS, <br />
-        Plaintiff,
-        <div className="text-left">vs.</div>
-        YOU,
-        <br />
+        Plaintiff
+      </div>
+      <div className="font-bold">vs.</div>
+      <div className="text-left">
+        YOU, <br />
         Defendant
       </div>
-      <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold">
+    </div>
+  );
+};
+
+const CourtTitle = () => {
+  return (
+    <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold text-center">
         <div className="bg-yellow-400 px-8">CLIMATE</div>
         <div className="bg-yellow-400 px-8">COURT</div>
       </div>
-    </div>
   );
 };
 

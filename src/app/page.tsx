@@ -3,9 +3,17 @@ import React, { useState, FormEvent } from "react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]">
+    <div 
+      className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]"
+      style={{
+        backgroundImage: "url('/paper-background.jpg')",
+        backgroundSize: "cover",
+        backgroundRepeat: "repeat",
+      }}
+    >
       <main className="flex flex-col items-center gap-[32px] mb-auto">
-        <CourtHeading />
+        <CourtTitle />
+        <PlaintiffVsDefendant />
         <ConfessionBox />
 
         <div className="flex justify-between w-full max-w-2xl">
@@ -16,25 +24,32 @@ export default function Home() {
     </div>
   );
 }
-
-const CourtHeading = () => {
+const CourtTitle = () => {
   return (
-    <div className="flex flex-row gap-[128px] items-center">
-      <div className="text-2xl text-right">
-        THE CLIMATE CONSCIOUS, <br />
-        Plaintiff,
-        <div className="text-left">vs.</div>
-        YOU,
-        <br />
-        Defendant
-      </div>
-      <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold">
+    <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold text-center">
         <div className="bg-yellow-400 px-8">CLIMATE</div>
         <div className="bg-yellow-400 px-8">COURT</div>
+      </div>
+  );
+};
+
+const PlaintiffVsDefendant = () => {
+  return (
+    <div className="flex justify-center items-center w-full gap-8 text-2xl">
+      <div className="text-right">
+        THE CLIMATE CONSCIOUS, <br />
+        Plaintiff
+      </div>
+      <div className="font-bold">vs.</div>
+      <div className="text-left">
+        YOU, <br />
+        Defendant
       </div>
     </div>
   );
 };
+
+
 
 const ConfessionBox = () => {
   const [confession, setConfession] = useState<string>("");
@@ -48,18 +63,18 @@ const ConfessionBox = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mt-8">
+    <div className="w-full max-w-2xl mt-8 mb-8">
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <textarea
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
           placeholder="confess your climate crime.."
-          className="w-full p-4 min-h-[100px] border border-gray-300 rounded-md bg-white text-xl font-serif"
+          className="w-full p-20 min-h-[100px] border border-gray-300 rounded-lg bg-white text-2xl font-serif"
           required
         />
         <button
           type="submit"
-          className="btn btn-warning mt-4 px-8 py-3 bg-yellow-400 text-black font-bold hover:bg-yellow-500"
+          className="btn btn-warning mt-4 mb-12 rounded-lg px-12 py-6 bg-yellow-400 text-black font-bold hover:bg-yellow-500"
         >
           submit to judgement
         </button>
@@ -70,7 +85,7 @@ const ConfessionBox = () => {
 
 const BreakingNewsButton = () => {
   return (
-    <button className="btn btn-outline border-2 border-gray-500 mb-4 rounded-md px-8 py-3 w-[300px]">
+    <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
       breaking news
     </button>
   );
@@ -78,7 +93,7 @@ const BreakingNewsButton = () => {
 
 const JuryDutyButton = () => {
   return (
-    <button className="btn btn-outline border-2 border-gray-500 rounded-md px-8 py-3 w-[300px]">
+    <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
       jury duty
     </button>
   );

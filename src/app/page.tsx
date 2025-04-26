@@ -7,12 +7,12 @@ export default function Home() {
       <main className="flex flex-col items-center gap-[32px]">
         <CourtHeading />
         <ConfessionBox />
+        
+        <div className="flex justify-between w-full max-w-2xl">
+          <BreakingNewsButton />
+          <JuryDutyButton />
+        </div>
       </main>
-      
-      <div className="flex justify-between w-full mb-16 mt-8">
-        <BreakingNewsButton />
-        <JuryDutyButton />
-      </div>
       
       <footer className="text-center pb-4">
         made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason

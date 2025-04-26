@@ -1,5 +1,5 @@
-'use client'
-import React, { useState, FormEvent } from 'react';
+"use client";
+import React, { useState, FormEvent } from "react";
 
 export default function Home() {
   return (
@@ -7,13 +7,13 @@ export default function Home() {
       <main className="flex flex-col items-center gap-[32px]">
         <CourtHeading />
         <ConfessionBox />
-        
+
         <div className="flex justify-between w-full max-w-2xl">
           <BreakingNewsButton />
           <JuryDutyButton />
         </div>
       </main>
-      
+
       <footer className="text-center pb-4">
         made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason
         Zhang
@@ -33,8 +33,9 @@ const CourtHeading = () => {
         <br />
         Defendant
       </div>
-      <div className="text-9xl italic bg-yellow-400 font-extrabold">
-        CLIMATE COURT
+      <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold">
+        <div className="bg-yellow-400 px-8">CLIMATE</div>
+        <div className="bg-yellow-400 px-8">COURT</div>
       </div>
     </div>
   );
@@ -42,10 +43,12 @@ const CourtHeading = () => {
 
 const ConfessionBox = () => {
   const [confession, setConfession] = useState<string>("");
-  
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("Your climate crime has been recorded. The court will now deliberate.");
+    alert(
+      "Your climate crime has been recorded. The court will now deliberate."
+    );
     setConfession("");
   };
 
@@ -59,8 +62,8 @@ const ConfessionBox = () => {
           className="w-full p-4 min-h-[100px] border border-gray-300 rounded-md bg-white text-lg font-serif"
           required
         />
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="btn btn-warning mt-4 px-8 py-3 bg-yellow-400 text-black font-bold hover:bg-yellow-500"
         >
           Submit to Judgment
@@ -76,7 +79,7 @@ const BreakingNewsButton = () => {
       Breaking News
     </button>
   );
-}
+};
 
 const JuryDutyButton = () => {
   return (
@@ -84,4 +87,4 @@ const JuryDutyButton = () => {
       Jury Duty
     </button>
   );
-}
+};

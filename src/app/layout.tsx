@@ -28,6 +28,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="text-center pb-2 pt-0 italic font-serif">
+          made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason
+          Zhang
+        </footer>
       </body>
     </html>
   );

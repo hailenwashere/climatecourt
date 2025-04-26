@@ -3,8 +3,8 @@ import React, { useState, FormEvent } from "react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-between min-h-screen p-8 font-[family-name:var(--font-serif)]">
-      <main className="flex flex-col items-center gap-[32px]">
+    <div className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]">
+      <main className="flex flex-col items-center gap-[32px] mb-auto">
         <CourtHeading />
         <ConfessionBox />
 
@@ -13,11 +13,6 @@ export default function Home() {
           <JuryDutyButton />
         </div>
       </main>
-
-      <footer className="text-center pb-4">
-        made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason
-        Zhang
-      </footer>
     </div>
   );
 }
@@ -25,7 +20,7 @@ export default function Home() {
 const CourtHeading = () => {
   return (
     <div className="flex flex-row gap-[128px] items-center">
-      <div className="text-lg text-right">
+      <div className="text-2xl text-right">
         THE CLIMATE CONSCIOUS, <br />
         Plaintiff,
         <div className="text-left">vs.</div>
@@ -59,7 +54,7 @@ const ConfessionBox = () => {
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
           placeholder="confess your climate crime.."
-          className="w-full p-4 min-h-[100px] border border-gray-300 rounded-md bg-white text-lg font-serif"
+          className="w-full p-4 min-h-[100px] border border-gray-300 rounded-md bg-white text-xl font-serif"
           required
         />
         <button
@@ -75,7 +70,7 @@ const ConfessionBox = () => {
 
 const BreakingNewsButton = () => {
   return (
-    <button className="btn btn-outline border-2 border-gray-500 mbrounded-md px-8 py-3 w-[300px]">
+    <button className="btn btn-outline border-2 border-gray-500 mb-4 rounded-md px-8 py-3 w-[300px]">
       breaking news
     </button>
   );

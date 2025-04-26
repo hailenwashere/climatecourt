@@ -12,15 +12,10 @@ export default function Home() {
         backgroundRepeat: "repeat",
       }}
     >
-      <div className="flex flex-col items-center gap-[32px] mb-auto">
+      <div className="flex flex-col items-center justify-center gap-[32px] h-full">
         <CourtTitle />
         <PlaintiffVsDefendant />
         <ConfessionBox />
-
-        <div className="flex justify-between w-full max-w-2xl">
-          <BreakingNewsButton />
-          <JuryDutyButton />
-        </div>
       </div>
     </div>
   );
@@ -79,25 +74,5 @@ const ConfessionBox = () => {
         </button>
       </form>
     </div>
-  );
-};
-
-const BreakingNewsButton = () => {
-  return (
-    <Link href="/crimes">
-      <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
-        breaking news
-      </button>
-    </Link>
-  );
-};
-
-const JuryDutyButton = () => {
-  return (
-    <Link href="/courtroom">
-      <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
-        jury duty
-      </button>
-    </Link>
   );
 };

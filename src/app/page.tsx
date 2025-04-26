@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, FormEvent } from "react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -85,16 +86,20 @@ const ConfessionBox = () => {
 
 const BreakingNewsButton = () => {
   return (
-    <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
-      breaking news
-    </button>
+    <Link href="/crimes">
+      <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
+        breaking news
+      </button>
+    </Link>
   );
 };
 
 const JuryDutyButton = () => {
   return (
-    <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
-      jury duty
-    </button>
+    <Link href="/courtroom">
+      <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
+        jury duty
+      </button>
+    </Link>
   );
 };

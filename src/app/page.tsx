@@ -1,10 +1,9 @@
 "use client";
 import React, { useState, FormEvent } from "react";
-import Link from "next/link";
 
 export default function Home() {
   return (
-    <div 
+    <div
       className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]"
       style={{
         backgroundImage: "url('/paper-background.jpg')",
@@ -12,25 +11,20 @@ export default function Home() {
         backgroundRepeat: "repeat",
       }}
     >
-      <main className="flex flex-col items-center gap-[32px] mb-auto">
+      <div className="flex flex-col items-center justify-center gap-[32px] h-full">
         <CourtTitle />
         <PlaintiffVsDefendant />
         <ConfessionBox />
-
-        <div className="flex justify-between w-full max-w-2xl">
-          <BreakingNewsButton />
-          <JuryDutyButton />
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
 const CourtTitle = () => {
   return (
     <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold text-center">
-        <div className="bg-yellow-400 px-8">CLIMATE</div>
-        <div className="bg-yellow-400 px-8">COURT</div>
-      </div>
+      <div className="bg-yellow-400 px-8">CLIMATE</div>
+      <div className="bg-yellow-400 px-8">COURT</div>
+    </div>
   );
 };
 
@@ -42,15 +36,13 @@ const PlaintiffVsDefendant = () => {
         Plaintiff
       </div>
       <div className="font-bold">vs.</div>
-      <div className="text-left">
+      <div className="text-right">
         YOU, <br />
         Defendant
       </div>
     </div>
   );
 };
-
-
 
 const ConfessionBox = () => {
   const [confession, setConfession] = useState<string>("");
@@ -70,7 +62,7 @@ const ConfessionBox = () => {
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
           placeholder="confess your climate crime.."
-          className="w-full p-20 min-h-[100px] border border-gray-300 rounded-lg bg-white text-2xl font-serif"
+          className="w-full p-20 min-h-[100px] border border-gray-300 rounded-lg bg-white text-2xl font-serif resize-none"
           required
         />
         <button
@@ -81,25 +73,5 @@ const ConfessionBox = () => {
         </button>
       </form>
     </div>
-  );
-};
-
-const BreakingNewsButton = () => {
-  return (
-    <Link href="/crimes">
-      <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
-        breaking news
-      </button>
-    </Link>
-  );
-};
-
-const JuryDutyButton = () => {
-  return (
-    <Link href="/courtroom">
-      <button className="btn btn-outline border-2 border-gray-500 rounded-lg px-8 py-3 w-[300px]">
-        jury duty
-      </button>
-    </Link>
   );
 };

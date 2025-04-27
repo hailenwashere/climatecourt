@@ -29,5 +29,11 @@ body {
 }
 
 .clip-path-polygon {
-  clip-path: polygon(0% 0%, calc(100% - 1rem) 0%, 100% 50%, calc(100% - 1rem) 100%, 0% 100%);
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 1rem) 0%,
+    100% 50%,
+    calc(100% - 1rem) 100%,
+    0% 100%
+  );
 }

@@ -8,7 +8,7 @@ import React from "react";
 const nav = [
   { label: "home", href: "/" },
   { label: "breaking news", href: "/news" },
-  { label: "jury duty", href: "/jury" },
+  { label: "jury duty", href: "/courtroom" },
 ];
 
 const Navbar = () => {

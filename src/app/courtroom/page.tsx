@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { DatabaseReference, getDatabase, increment, onValue, ref, set, get, update } from "firebase/database"; 
 import {db} from "@/app/lib/firebase"; // assuming you already set up firebase like your earlier message
 // import Image from "next/image";
-import NPCImage from "@/app/components/NpcImage.tsx";
-import UserAvatar from "@/app/components/UserAvatar.tsx";
+import NPCImage from "@/app/components/NpcImage";
+import UserAvatar from "@/app/components/UserAvatar";
 
 export default function Courtroom() {
   interface CourtroomLogic {

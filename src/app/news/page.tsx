@@ -46,9 +46,7 @@ export default function BreakingNews() {
         <p className="text-sm italic">independent, objective public shaming</p>
       </header>
 
-      <div
-        className={`flex flex-row gap-4 flex-wrap w-7xl max-w-3/4 justify-center`}
-      >
+      <div className="grid grid-flow-row-dense gap-4 grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
         {crimes.length === 0 && (
           <>
             {Array.from({ length: 6 }).map((_, index) => (
@@ -59,7 +57,7 @@ export default function BreakingNews() {
         {crimes.map((crime) => (
           <div
             key={crime.id}
-            className="card w-96 bg-base-100 card-md card-border border-2"
+            className="card w-96 bg-base-100 card-md card-border border-2 col-span1"
           >
             <div className="card-body justify-between">
               <h2
@@ -109,7 +107,7 @@ const Result = ({ yesVotes, noVotes }: ResultProps) => {
         />
 
         <div
-          className="bg-red-500 tooltip tooltip-right font-bold tooltip-neutral transition-all duration-500"
+          className="bg-red-500 tooltip tooltip-right font-bold tooltip-neutral transition-all duration-1000"
           data-tip={`${noVotes} no votes`}
           style={{ width: `${noWidth}%` }}
         />

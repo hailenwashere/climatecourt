@@ -12,8 +12,8 @@
 
 We all bargain with ourselves when it comes to the climate:
 
-* *"Two separate Amazon orders—but they’ll probably ship in the same box.”*  
-* *“I’ll take the car to the gym—leg day starts after I park.”*
+* *"Two separate Amazon orders...but they’ll probably ship in the same box.”*  
+* *“I’ll take the car to the gym - leg day starts after I park.”*
 
 Those private negotiations inspired Climate Court—an anonymous space that swaps inner guilt for public judgment. By mixing humor with accountability we lower the barrier to honest climate talk and turn **eco-anxiety** into constructive reflection.
 

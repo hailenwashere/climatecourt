@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { EB_Garamond } from "next/font/google";
+import { Nanum_Pen_Script } from "next/font/google";
 import { db } from "@/app/lib/firebase";
 import { ref, get } from "firebase/database";
 
-const garamond = EB_Garamond({ subsets: ["latin"] });
+const nanum = Nanum_Pen_Script({
+  subsets: ["latin"],
+  weight: "400",
+});
 
 type Crime = {
   id: string;
@@ -14,7 +17,7 @@ type Crime = {
   nayCount: number;
 };
 
-export default function BreakingNews() {
+export default function CrimeBoard() {
   const [crimes, setCrimes] = useState<Crime[]>([]);
 
   useEffect(() => {
@@ -38,15 +41,15 @@ export default function BreakingNews() {
   }, []);
 
   return (
-    <div className="min-h-screen py-10 px-4 flex flex-col items-center bg-base-200">
+    <div className="min-h-screen py-10 px-4 flex flex-col items-center ">
       <header className="mb-6">
         <h1 className="text-4xl font-bold font-serif mb-1 ">
-          climate court // BREAKING NEWS
+          climate court // CRIME BOARD
         </h1>
         <p className="text-sm italic">independent, objective public shaming</p>
       </header>
 
-      <div className="grid grid-flow-row-dense gap-4 grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
+      <div className="grid grid-flow-row-dense gap-8 grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
         {crimes.length === 0 && (
           <>
             {Array.from({ length: 6 }).map((_, index) => (
@@ -55,27 +58,19 @@ export default function BreakingNews() {
           </>
         )}
         {crimes.map((crime) => (
-          <div
-            key={crime.id}
-            className="card w-96 bg-base-100 card-md card-border border-2 col-span1"
-          >
-            <div className="card-body justify-between">
-              <h2
-                className={`${garamond.className} card-title font-extrabold flex-auto"`}
-              >
-                {crime.crime}
-              </h2>
-              <div>
-                <div className="divider" />
-                <Result yesVotes={crime.yayCount} noVotes={crime.nayCount} />
-              </div>
-            </div>
-          </div>
+          <StickyNote key={crime.id} crime={crime} />
         ))}
       </div>
     </div>
   );
 }
+
+const votePlural = (count: number) => {
+  if (count === 1) {
+    return "vote";
+  }
+  return "votes";
+};
 
 type ResultProps = {
   yesVotes: number;
@@ -102,17 +97,53 @@ const Result = ({ yesVotes, noVotes }: ResultProps) => {
       </p>
       <div className="flex flex-row w-full h-8">
         <div
-          className="bg-green-500 tooltip tooltip-left font-bold tooltip-neutral flex-auto"
-          data-tip={`${yesVotes} yes votes`}
+          className="bg-green-500 tooltip  font-bold tooltip-neutral flex-auto "
+          data-tip={`${yesVotes} yes ${votePlural(yesVotes)}`}
         />
 
         <div
-          className="bg-red-500 tooltip tooltip-right font-bold tooltip-neutral transition-all duration-1000"
-          data-tip={`${noVotes} no votes`}
+          className="bg-red-500 tooltip  font-bold tooltip-neutral transition-all duration-1000"
+          data-tip={`${noVotes} no ${votePlural(noVotes)}`}
           style={{ width: `${noWidth}%` }}
         />
       </div>
-      <p className="text-sm font-bold">{totalVotes} total votes</p>
+      <p className="text-sm font-bold">
+        {totalVotes} total {votePlural(totalVotes)}
+      </p>
+    </div>
+  );
+};
+
+const StickyNote = ({ crime }: { crime: Crime }) => {
+  const rotations = [
+    "rotate-1",
+    "rotate-2",
+    "-rotate-1",
+    "-rotate-2",
+    "rotate-0",
+  ];
+  const randomClass = rotations[Math.floor(Math.random() * rotations.length)];
+  return (
+    <div
+      className={`${randomClass} card w-96 bg-white shadow-md transition-all hover:shadow-xl hover:-translate-y-1 `}
+      style={{
+        backgroundImage:
+          "repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(0,0,0,0.03) 20px, rgba(0,0,0,0.03) 21px)",
+      }}
+    >
+      {/* Pin effect */}
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-red-500 shadow-md"></div>
+
+      <div className="card-body justify-between p-6 pt-8">
+        <h2
+          className={`${nanum.className} card-title font-extrabold flex-auto text-gray-800 text-4xl py-4`}
+        >
+          {crime.crime}
+        </h2>
+        <div>
+          <Result yesVotes={crime.yayCount} noVotes={crime.nayCount} />
+        </div>
+      </div>
     </div>
   );
 };

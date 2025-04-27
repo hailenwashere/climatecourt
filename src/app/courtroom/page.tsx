@@ -33,8 +33,6 @@ export default function Courtroom() {
   const {
     seconds,
     minutes,
-    hours,
-    days,
     isRunning,
     restart,
   } = useTimer({
@@ -143,7 +141,7 @@ export default function Courtroom() {
             {isVoting ? (
               <>
                 <div className="text-xl font-bold">
-                  Voting ends in: {days}d {hours}h {minutes}m {seconds}s
+                  Voting ends in: {minutes}m {seconds}s
                 </div>
 
                 {/* Animated Progress Bar, buggy countdown visual

@@ -1,13 +1,23 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { use, useEffect, useState } from "react";
-import { DatabaseReference, getDatabase, increment, onValue, ref, set, get, update } from "firebase/database"; 
-import {db} from "@/app/lib/firebase"; // assuming you already set up firebase like your earlier message
+import { useEffect, useState, useRef } from "react";
+import { increment, onValue, ref, get, update } from "firebase/database";
+import { db } from "@/app/lib/firebase"; // assuming you already set up firebase like your earlier message
 // import Image from "next/image";
 import NPCImage from "@/app/components/NpcImage";
 import UserAvatar from "@/app/components/UserAvatar";
 import { useTimer } from 'react-timer-hook';
+import usePrevious from "@/app/usePrevious";
+import { motion } from "framer-motion";
 
+interface CourtroomLogic {
+  secondsLeft: number;
+  numPpl: number;
+  currCrime: string;
+  yayCount: number;
+  nayCount: number;
+}
 export default function Courtroom() {
   interface CourtroomLogic {
     secondsLeft: number,
@@ -55,7 +65,7 @@ export default function Courtroom() {
 
   useEffect(() => {
     const courtroomLogicRef = ref(db, "logic");
-  
+
     const changeVote = onValue(courtroomLogicRef, async (snapshot) => {
       const newCourtroom = snapshot.val();
       setCourtroom(newCourtroom);
@@ -74,7 +84,7 @@ export default function Courtroom() {
         setCrime(crimeSnapshot.val().crime);
       }
     });
-  
+
     return () => changeVote();
   }, []);
 
@@ -85,30 +95,28 @@ export default function Courtroom() {
       setIsVoting(newExpiry.getTime() > Date.now());
     }
   }, [courtroom?.endTime]);
-  
 
   useEffect(() => {
     // Update Firebase Realtime Database
     const updateVotes = async () => {
       if (!courtroom) {
         return;
-      }
-      else {
+      } else {
         const crimeRef = ref(db, `crimes/${courtroom.currCrime}`);
         const courtroomRef = ref(db, "logic");
-        let yesIncrement = 0;
-        let noIncrement = 0;
-        vote === "yay" ? yesIncrement = 1 : noIncrement = 1;
-        if (hasVoted) {
-          const courtroom = (await get(courtroomRef)).val();
-          yesIncrement = vote === "yay" ? 1 : (courtroom.yayCount > 0 ? -1 : 0);
-          noIncrement  = vote === "nay" ? 1 : (courtroom.nayCount > 0 ? -1 : 0);
-        }
+
+        const decrement = hasVoted ? -1 : 0;
+        const yesIncrement = vote === "yay" ? 1 : decrement;
+        const noIncrement = vote === "yay" ? decrement : 1;
+
         setHasVoted(true);
-        
+
         // updating realtime courtroom data
-        await update(courtroomRef, {yayCount: increment(yesIncrement), nayCount: increment(noIncrement)});
-        
+        await update(courtroomRef, {
+          yayCount: increment(yesIncrement),
+          nayCount: increment(noIncrement),
+        });
+
         // updating crime (should be in firestore)
         const updatedCourtroomData = (await get(courtroomRef)).val();
         await update(crimeRef, {
@@ -134,79 +142,223 @@ export default function Courtroom() {
   // isVoting affects both the timer (between displaying timeleft and "voting has ended") AND the buttons (disabled when not isVoting)
 
   return (
-    <div className="grid grid-rows-[1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-serif)]">
-      <main className="flex flex-col items-center gap-8">
-        {isVoting !== null && (
-          <div className="flex flex-col items-center gap-2 w-full">
-            {isVoting ? (
-              <>
-                <div className="text-xl font-bold">
-                  Voting ends in: {minutes}m {seconds}s
-                </div>
-
-                {/* Animated Progress Bar, buggy countdown visual
-                <div className="w-full max-w-[600px] bg-gray-300 h-4 rounded-full overflow-hidden mt-2">
-                  <div
-                    className="bg-green-500 h-full transition-all duration-1000 ease-linear"
-                    style={{ width: `${getTimeLeftPercent()}%` }}
-                  />
-                </div> */}
-              </>
-            ) : (
-              <div className="text-xl font-bold text-red-500">
-                Voting has ended.
-              </div>
-            )}
-          </div>
-        )}
-        
-        {/* Card for Crime */}
-        <div style={{
-          backgroundImage: `url('/judge.webp')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }} className="bg-cover bg-center w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg">
-          <div className="flex flex-col items-center gap-4">
-            <div className="text-3xl font-bold font-underline text-center">Today's Court Case:</div>
-            <div className="italic max-w-[600px] max-h-[150px] break-words text-center">
-              {crime ? crime : "Loading..."}
-            </div>
-          </div>
-          <div className="flex flex-row justify-between items-center mb-25 w-4/5">
-            <div className ="flex flex-col items-center"> 
-              {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
-              <button disabled={!isVoting} className={`btn text-xl ${vote === "yay" ? "btn-success" : "btn-outline"}`} onClick={() => handleVote("yay")}>
-                Yay 👍
-              </button>
-            </div>
-            <div className ="flex flex-col items-center"> 
-              {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
-              <button disabled={!isVoting} className={`btn text-xl ${vote === "nay" ? "btn-error" : "btn-outline"}`} onClick={() => handleVote("nay")}>
-                Nay 👎
-              </button>
-            </div>
+    <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)]">
+      {/* Card for Crime */}
+      <div className="bg-[url('/judge.webp')] bg-cover bg-center w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
+        <img
+          src="/monitor.png"
+          alt="Monitor"
+          width="670px"
+          className="max-w-none absolute left-1/2 -top-4 transform -translate-x-1/2 pointer-events-none z-10"
+        />
+        <div className="flex flex-col items-center gap-4">
+          <Marquee />
+        <div className="max-w-[600px] max-h-[150px] text-center text-gray-800 text-2xl font-serif leading-relaxed border-b pb-2">
+          {crime ? crime : "Loading..."}
           </div>
         </div>
-
-        {/* Crowd */}
-        <div className="relative w-[600px] h-[300px] flex justify-center">
-          <NPCImage type="A" x={100} y={100} opacity={0.5} />
-          <NPCImage type="A" x={200} y={100} opacity={0.5} />
-          <NPCImage type="A" x={300} y={100} opacity={0.5} />
-          <NPCImage type="A" x={400} y={100} opacity={0.5} />
-
-          <NPCImage type="A" x={50} y={50} opacity={1} />
-          <NPCImage type="A" x={150} y={50} opacity={1} />
-          <NPCImage type="A" x={250} y={50} opacity={1} />
-          <NPCImage type="A" x={350} y={50} opacity={1} />
-          <UserAvatar x={450} y={50} vote={vote}/>
+        <div className="flex flex-row justify-between items-center mb-25 w-4/5">
+          <div className="flex flex-col items-center">
+            {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
+            <button
+              className={`btn text-xl ${
+                vote === "yay" ? "btn-success" : "btn-outline"
+              }`}
+              onClick={() => handleVote("yay")}
+            >
+              Yay 👍
+            </button>
+          </div>
+          <div className="flex flex-col items-center">
+            {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
+            <button
+              className={`btn text-xl ${
+                vote === "nay" ? "btn-error" : "btn-outline"
+              }`}
+              onClick={() => handleVote("nay")}
+            >
+              Nay 👎
+            </button>
+          </div>
         </div>
+      </div>
 
-      </main>
+      {/* Crowd */}
+      <Crowd vote={vote} courtroom={courtroom} />
 
-      <footer className="row-start-2 text-sm">
-        made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason Zhang
-      </footer>
+      {/* User Avatar */}
     </div>
   );
 }
+
+const Marquee = () => {
+	const [textWidth, setTextWidth] = useState<number>(0);
+	const text = `Is this moral in our current climate catastrophe? \xa0`;
+	const repeatTimes = 8;
+	const repeatedText = Array(repeatTimes).fill(text).join(" ");
+
+	const textRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		if (textRef.current) {
+			setTextWidth(textRef.current.offsetWidth);
+		}
+	}, [textRef]);
+
+	const tickerVariants = {
+		animate: {
+			x: [0, -textWidth],
+			transition: {
+				x: {
+					duration: 40,
+					repeat: Infinity,
+					repeatType: "loop",
+					ease: "linear"
+				}
+			}
+		}
+	};
+
+	return (
+    <div className="overflow-hidden whitespace-nowrap w-[600px] bg-red-700 py-2 px-4 flex items-center shadow-xl">
+      <motion.div
+        className="inline-block text-[1.5rem] text-white font-bold tracking-wide font-sans uppercase"
+        variants={tickerVariants}
+        initial="animate"
+        animate="animate"
+        ref={textRef}
+      >
+        {repeatedText}
+      </motion.div>
+      <motion.div
+        className="inline-block text-[1.5rem] text-white font-bold tracking-wide font-sans uppercase"
+        variants={tickerVariants}
+        initial="animate"
+        animate="animate"
+      >
+        {repeatedText}
+      </motion.div>
+    </div>
+  );
+  
+}
+
+const Crowd = ({
+  vote,
+  courtroom,
+}: {
+  vote: "yay" | "nay" | null;
+  courtroom: CourtroomLogic | undefined;
+}) => {
+  const [reactions, setReactions] = useState<("yay" | "nay" | "none")[]>([
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+  ]);
+
+  const prevNayCount = usePrevious(courtroom?.nayCount);
+
+  useEffect(() => {
+    if (!courtroom?.nayCount) return;
+
+    const updateReaction = (type: "yay" | "nay" | "none") => {
+      const index = Math.floor(Math.random() * reactions.length);
+      setReactions((prev) => {
+        const newReactions = [...prev];
+        newReactions[index] = type;
+        return newReactions;
+      });
+
+      setTimeout(() => {
+        setReactions((prev) => {
+          const newReactions = [...prev];
+          newReactions[index] = "none";
+          return newReactions;
+        });
+      }, 3000);
+    };
+
+    if (courtroom.nayCount > (prevNayCount ?? courtroom.nayCount)) {
+      updateReaction("nay");
+    } else if (courtroom.nayCount < (prevNayCount ?? courtroom.nayCount)) {
+      updateReaction("yay");
+    }
+  }, [courtroom?.nayCount, prevNayCount, reactions.length]);
+
+  return (
+    <div className="relative w-[600px] h-[300px] flex justify-center">
+      <NPCImage
+        key={0}
+        type="A"
+        x={100}
+        y={100}
+        opacity={0.5}
+        chatDirection="left"
+        displayChat={reactions[0]}
+      />
+      <NPCImage
+        type="A"
+        x={200}
+        y={100}
+        opacity={0.5}
+        chatDirection="left"
+        displayChat={reactions[1]}
+      />
+      <NPCImage
+        type="A"
+        x={300}
+        y={100}
+        opacity={0.5}
+        chatDirection="right"
+        displayChat={reactions[2]}
+      />
+      <NPCImage
+        type="A"
+        x={400}
+        y={100}
+        opacity={0.5}
+        chatDirection="right"
+        displayChat={reactions[3]}
+      />
+
+      <NPCImage
+        type="A"
+        x={50}
+        y={50}
+        opacity={1}
+        chatDirection="left"
+        displayChat={reactions[4]}
+      />
+      <NPCImage
+        type="A"
+        x={150}
+        y={50}
+        opacity={1}
+        chatDirection="left"
+        displayChat={reactions[5]}
+      />
+      <NPCImage
+        type="A"
+        x={250}
+        y={50}
+        opacity={1}
+        chatDirection="right"
+        displayChat={reactions[6]}
+      />
+      <NPCImage
+        type="A"
+        x={350}
+        y={50}
+        opacity={1}
+        chatDirection="right"
+        displayChat={reactions[7]}
+      />
+      <UserAvatar x={450} y={50} vote={vote} />
+    </div>
+  );
+};

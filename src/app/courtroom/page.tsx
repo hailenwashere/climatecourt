@@ -142,30 +142,6 @@ export default function Courtroom() {
   // isVoting affects both the timer (between displaying timeleft and "voting has ended") AND the buttons (disabled when not isVoting)
 
   return (
-    // {isVoting !== null && (
-    //   <div className="flex flex-col items-center gap-2 w-full">
-    //     {isVoting ? (
-    //       <>
-    //         <div className="text-xl font-bold">
-    //           Voting ends in: {minutes}m {seconds}s
-    //         </div>
-
-    //         {/* Animated Progress Bar, buggy countdown visual
-    //         <div className="w-full max-w-[600px] bg-gray-300 h-4 rounded-full overflow-hidden mt-2">
-    //           <div
-    //             className="bg-green-500 h-full transition-all duration-1000 ease-linear"
-    //             style={{ width: `${getTimeLeftPercent()}%` }}
-    //           />
-    //         </div> */}
-    //       </>
-    //     ) : (
-    //       <div className="text-xl font-bold text-red-500">
-    //         Voting has ended.
-    //       </div>
-    //     )}
-    //   </div>
-    // )}
-    
     <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)]">
       <div>
         {isVoting ? (

@@ -64,8 +64,7 @@ const ConfessionBox = () => {
     // Call the model to get a response
     const result = await checkConfessionWithModel(confession);
     console.log(result);
-    setLoading(false);
-
+    
     if (result.trim().toLowerCase() === "yes") {
       console.log("positive");
       const judgement = await generateJudgeResponse(confession);
@@ -79,6 +78,7 @@ const ConfessionBox = () => {
     } else {
       setResponse("Your confession is not a valid climate crime.");
     }
+    setLoading(false);
     (document.getElementById('pop-up') as HTMLDialogElement)?.showModal();
     setConfession("");
   };
@@ -174,7 +174,7 @@ const ConfessionBox = () => {
         <div className={`flex flex-row ${loading ? "justify-between" : "justify-end"} w-full mt-2`}>
           {loading && (
             <div className="ml-5 flex flex-row items-center gap-2">
-              <span>Thinking...</span>
+              <span>Processing...</span>
               <div className="spinner"></div>
             </div>
           )}

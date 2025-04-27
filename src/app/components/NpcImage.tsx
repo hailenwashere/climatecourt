@@ -9,7 +9,7 @@ interface NPCImageProps {
 }
 
 const NPCImage : React.FC<NPCImageProps> = ({type, x, y, opacity}) => {
-    let imagesrc = type === "A" ? "/crowd-person1.webp" : "/crowd-person2.webp";
+    const imagesrc = type === "A" ? "/crowd-person1.webp" : "/crowd-person2.webp";
     
     return (
         <div style={{

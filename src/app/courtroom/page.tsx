@@ -142,9 +142,51 @@ export default function Courtroom() {
   // isVoting affects both the timer (between displaying timeleft and "voting has ended") AND the buttons (disabled when not isVoting)
 
   return (
+    // {isVoting !== null && (
+    //   <div className="flex flex-col items-center gap-2 w-full">
+    //     {isVoting ? (
+    //       <>
+    //         <div className="text-xl font-bold">
+    //           Voting ends in: {minutes}m {seconds}s
+    //         </div>
+
+    //         {/* Animated Progress Bar, buggy countdown visual
+    //         <div className="w-full max-w-[600px] bg-gray-300 h-4 rounded-full overflow-hidden mt-2">
+    //           <div
+    //             className="bg-green-500 h-full transition-all duration-1000 ease-linear"
+    //             style={{ width: `${getTimeLeftPercent()}%` }}
+    //           />
+    //         </div> */}
+    //       </>
+    //     ) : (
+    //       <div className="text-xl font-bold text-red-500">
+    //         Voting has ended.
+    //       </div>
+    //     )}
+    //   </div>
+    // )}
+    
     <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)]">
+      <div>
+        {isVoting ? (
+          <div className="text-xl font-bold">
+            <div>
+              Voting ends in: {minutes}m {seconds}s
+            </div>
+          </div>
+        ) : (
+          <div className="text-xl font-bold text-red-500">
+            Voting has ended.
+          </div>
+        )}
+      </div>
       {/* Card for Crime */}
-      <div className="bg-[url('/judge.webp')] bg-cover bg-center w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
+      <div style={{
+          backgroundImage: `url('/judge.webp')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+        className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
         <img
           src="/monitor.png"
           alt="Monitor"
@@ -160,7 +202,7 @@ export default function Courtroom() {
         <div className="flex flex-row justify-between items-center mb-25 w-4/5">
           <div className="flex flex-col items-center">
             {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
-            <button
+            <button disabled={!isVoting} 
               className={`btn text-xl ${
                 vote === "yay" ? "btn-success" : "btn-outline"
               }`}
@@ -171,7 +213,7 @@ export default function Courtroom() {
           </div>
           <div className="flex flex-col items-center">
             {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
-            <button
+            <button disabled={!isVoting} 
               className={`btn text-xl ${
                 vote === "nay" ? "btn-error" : "btn-outline"
               }`}

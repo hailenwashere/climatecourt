@@ -37,3 +37,35 @@ body {
     0% 100%
   );
 }
+
+@keyframes bubbleIn {
+  0% {
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bubbleOut {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+.vote-bubble-enter {
+  animation: bubbleIn 0.3s ease-out forwards;
+}
+
+.vote-bubble-exit {
+  animation: bubbleOut 0.3s ease-in forwards;
+}

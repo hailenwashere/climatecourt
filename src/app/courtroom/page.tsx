@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { DatabaseReference, getDatabase, increment, onValue, ref, set, get, update } from "firebase/database"; 
+// import { Crowd } from "@/components/crowd.tsx"; // or wherever you put it
 import {db} from "@/app/lib/firebase"; // assuming you already set up firebase like your earlier message
 import { snapshotEqual } from "firebase/firestore";
+import NPCImage from "../components/npcimage";
 
 export default function Courtroom() {
   interface CourtroomLogic {
@@ -20,6 +22,7 @@ export default function Courtroom() {
 
   const [vote, setVote] = useState<"yay" | "nay" | null>(null);
   const [courtroom, setCourtroom] = useState<CourtroomLogic>();
+  const [selfsprite, setSelfsprite] = useState();
   // const [seconds, setSeconds] = useState();
   // const [crime, setCrime] = useState();
   // const [numPpl, setNumPpl] = useState(1);
@@ -43,6 +46,8 @@ export default function Courtroom() {
       }
      
       await update(crimeRef, {yayCount: increment(yesIncrement), nayCount: increment(noIncrement)});
+
+
     }
 
     setVote(newVote);
@@ -82,6 +87,19 @@ export default function Courtroom() {
               Nay 👎
             </button>
           </div>
+        </div>
+        <div>
+          <NPCImage type="A" x={500} y={500} opacity={.5}/>
+          <NPCImage type="A" x={400} y={500} opacity={.5}/>
+          <NPCImage type="A" x={600} y={500} opacity={.5}/>
+          <NPCImage type="A" x={700} y={500} opacity={.5}/>
+        </div>
+        <div>
+          <NPCImage type="A" x={550} y={550} opacity={1}/>
+          <NPCImage type="A" x={450} y={550} opacity={1}/>
+          <NPCImage type="A" x={350} y={550} opacity={1}/>
+          <NPCImage type="A" x={650} y={550} opacity={1}/>
+          {/* <NPCImage type="A" x={750} y={550} opacity={1}/>  */}
         </div>
       </main>
       <footer className="row-start-2 text-sm">

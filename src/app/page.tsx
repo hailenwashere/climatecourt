@@ -52,6 +52,9 @@ const ConfessionBox = () => {
     crime: confession,
     yayCount: 0,
     nayCount: 0,
+    judgeResponse: "",
+    guiltyVerdict: "",
+    innocentVerdict: ""
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -65,6 +68,12 @@ const ConfessionBox = () => {
 
     if (result.trim().toLowerCase() === "yes") {
       console.log("positive");
+      const judgement = await generateJudgeResponse(confession);
+      crimeData.judgeResponse = judgement;
+      const guilty = await generateGuiltyVerdict(confession);
+      crimeData.guiltyVerdict = guilty;
+      const innocent = await generateInnocentVerdict(confession);
+      crimeData.innocentVerdict = innocent;
       set(ref(db, `crimes/${crimeId}`), crimeData);
       setResponse("Your climate crime has been recorded. The court will now deliberate.");
     } else {
@@ -108,6 +117,49 @@ const ConfessionBox = () => {
     const text = response.text();
     return text;
   };  
+
+  const generateJudgeResponse = async (confession: string) => {
+    const prompt = `You are a climate-conscious judge with a sense of humor. The defendant is confessing that they do/think the following: "${confession}\". \
+    Generate up to 4 sentences, judging how this confession might affect the environment with concrete and understandable facts, with quantitative impacts. If this is a good action for the environment \
+    speak with a positive, humorous attitude about how this positively impacts the environment. If it is a wasteful or harmful belief/habit/action to the environment,
+    share some knowledge on why this negatively impacts the environment, in a sarcastic and funny way. Limit the judgement to one topic. For example, if the crime were taking 30 minute showers, \
+    don't talk about both water waste and carbon emissions, just talk about the more relevant topic.`;
+
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const geminiResponse = response.text();
+    console.log(geminiResponse);
+    return geminiResponse;
+  }
+
+  const generateGuiltyVerdict = async (confession: string) => {
+    const prompt = `The jury has decided that the defendant is guilty of harming the environment with their confession. Follow the following format \
+    \"You've been found guilty of excessive water usage. \
+    The court sentences you to a month of shorter showers! \
+    Next time, remember that water conservation matters. \" \
+    Be sure to add some humor but remind the defendant of what environtal impact their actions have. Limit the response to 3 sentences, like the format provided.
+    `
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const geminiResponse = response.text();
+    console.log(geminiResponse);
+    return geminiResponse;
+  }
+
+  const generateInnocentVerdict = async (confession: string) => {
+    const prompt = `The jury has decided that the defendant is innocent of harming the environment with their confession. Follow the following format \
+    \"You've been found guilty of excessive water usage. \
+    The court sentences you to a month of shorter showers! \
+    Next time, remember that water conservation matters. \" \
+    Except instead of being guily, the defendant is innocent and is not excessively harming the environment. \
+    Be sure to add some humor but remind the defendant of what environtal impact their actions have. Limit the response to 3 sentences, like the format provided.
+    `
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const geminiResponse = response.text();
+    console.log(geminiResponse);
+    return geminiResponse;
+  }
 
   return (
     <div className="w-full max-w-2xl mt-6 mb-8">

@@ -161,50 +161,51 @@ export default function Courtroom() {
           isVoting={isVoting}
           className="w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg"
       >
-      {/* Card for Crime */}
-      <div style={{
-          backgroundImage: `url('/judge.webp')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-        className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
-        <img
-          src="/monitor.png"
-          alt="Monitor"
-          width="670px"
-          className="max-w-none absolute left-1/2 -top-4 transform -translate-x-1/2 pointer-events-none z-10"
-        />
-        <div className="flex flex-col items-center gap-4">
-          <Marquee />
-        <div className="max-w-[600px] max-h-[150px] text-center text-gray-800 text-2xl font-serif leading-relaxed border-b pb-2">
-          {crime ? crime : "Loading..."}
+        {/* Card for Crime */}
+        <div style={{
+            backgroundImage: `url('/judge.webp')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+          className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
+          <img
+            src="/monitor.png"
+            alt="Monitor"
+            width="670px"
+            className="max-w-none absolute left-1/2 -top-4 transform -translate-x-1/2 pointer-events-none z-10"
+          />
+          <div className="flex flex-col items-center gap-4">
+            <Marquee />
+          <div className="max-w-[600px] max-h-[150px] text-center text-gray-800 text-2xl font-serif leading-relaxed border-b pb-2">
+            {crime ? crime : "Loading..."}
+            </div>
+          </div>
+          <div className="flex flex-row justify-between items-center mb-25 w-4/5">
+            <div className="flex flex-col items-center">
+              {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
+              <button disabled={!isVoting} 
+                className={`btn text-xl ${
+                  vote === "yay" ? "btn-success" : "btn-outline"
+                }`}
+                onClick={() => handleVote("yay")}
+              >
+                Yay 👍
+              </button>
+            </div>
+            <div className="flex flex-col items-center">
+              {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
+              <button disabled={!isVoting} 
+                className={`btn text-xl ${
+                  vote === "nay" ? "btn-error" : "btn-outline"
+                }`}
+                onClick={() => handleVote("nay")}
+              >
+                Nay 👎
+              </button>
+            </div>
           </div>
         </div>
-        <div className="flex flex-row justify-between items-center mb-25 w-4/5">
-          <div className="flex flex-col items-center">
-            {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
-            <button disabled={!isVoting} 
-              className={`btn text-xl ${
-                vote === "yay" ? "btn-success" : "btn-outline"
-              }`}
-              onClick={() => handleVote("yay")}
-            >
-              Yay 👍
-            </button>
-          </div>
-          <div className="flex flex-col items-center">
-            {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
-            <button disabled={!isVoting} 
-              className={`btn text-xl ${
-                vote === "nay" ? "btn-error" : "btn-outline"
-              }`}
-              onClick={() => handleVote("nay")}
-            >
-              Nay 👎
-            </button>
-          </div>
-        </div>
-      </div>
+      </Judge>
 
       {/* Crowd */}
       <Crowd vote={vote} courtroom={courtroom} />

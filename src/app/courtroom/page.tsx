@@ -11,6 +11,7 @@ import { useTimer } from "react-timer-hook";
 import Judge from "@/app/components/Judge";
 import usePrevious from "@/app/usePrevious";
 import { motion } from "framer-motion";
+import Clock from "@/app/courtroom/clock";
 
 interface CourtroomLogic {
   secondsLeft: number;
@@ -36,12 +37,12 @@ export default function Courtroom() {
 
   // for timer logic + judge animation trigger
   const [isVoting, setIsVoting] = useState<boolean | null>(null);
-  const [timeNow, setTimeNow] = useState(Date.now());
+  const [, setTimeNow] = useState(Date.now());
 
   // timer hook needs an expiryTime to set to
   const expiryTimestamp = courtroom ? new Date(courtroom.endTime) : new Date();
 
-  const { seconds, minutes, isRunning, restart } = useTimer({
+  const { seconds, minutes, restart } = useTimer({
     expiryTimestamp,
     onExpire: () => setIsVoting(false),
   });
@@ -133,35 +134,11 @@ export default function Courtroom() {
     updateVotes();
   }, [vote]);
 
-  // // if we want a timer bar or countdown visual
-  // function getTimeLeftPercent() {
-  //   if (!courtroom?.endTime) return 0;
-
-  //   const totalMillis = courtroom.endTime - Date.now();
-  //   const fullDuration = courtroom.endTime - (Date.now() - (seconds + minutes*60 + hours*3600 + days*86400)*1000);
-
-  //   return Math.max(0, (totalMillis / fullDuration) * 100);
-  // }
-
-  // isVoting affects both the timer (between displaying timeleft and "voting has ended") AND the buttons (disabled when not isVoting)
-
   return (
-    <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)]">
-      <div>
-        {isVoting ? (
-          <div className="text-xl font-bold">
-            <div>
-              Voting ends in: {minutes}m {seconds}s
-            </div>
-          </div>
-        ) : (
-          <div className="text-xl font-bold text-red-500">
-            Voting has ended.
-          </div>
-        )}
-      </div>
+    <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)] pt-24">
       {/* Card for Crime */}
       <div className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
+        <Clock seconds={seconds} minutes={minutes} />
         <img
           src="/monitor.png"
           alt="Monitor"
@@ -175,13 +152,13 @@ export default function Courtroom() {
             {crime ? crime : "Loading..."}
           </div>
         </div>
-        <div className="flex flex-row justify-between items-center mb-25 w-4/5 mt-15 z-10">
+        <div className="flex flex-row justify-between items-center mb-25 w-4/5 mt-15 z-10 font-sans">
           <div className="flex flex-col items-center gap-3">
             <div className="relative h-8 overflow-hidden flex items-center justify-center font-bold text-4xl text-green-600">
               {courtroom ? courtroom.yayCount : "-"}
             </div>
             <button
-              disabled={!isVoting}
+              disabled={!isVoting || vote === "yay"}
               className="btn text-xl bg-yellow-400"
               onClick={() => handleVote("yay")}
             >
@@ -193,7 +170,7 @@ export default function Courtroom() {
               {courtroom ? courtroom.nayCount : "-"}
             </div>
             <button
-              disabled={!isVoting}
+              disabled={!isVoting || vote === "nay"}
               className="btn text-xl bg-yellow-400"
               onClick={() => handleVote("nay")}
             >
@@ -244,7 +221,7 @@ const Marquee = () => {
   };
 
   return (
-    <div className="overflow-hidden whitespace-nowrap w-[600px] bg-yellow-600 py-1 px-4 flex items-center shadow-xl">
+    <div className="overflow-hidden whitespace-nowrap w-[600px] bg-red-400 py-1 px-4 flex items-center shadow-xl">
       <motion.div
         className="inline-block text-[1.5rem] text-white font-bold tracking-wide uppercase"
         variants={tickerVariants}

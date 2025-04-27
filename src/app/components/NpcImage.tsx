@@ -59,7 +59,7 @@ const NPCImage: React.FC<NPCImageProps> = ({
           src={chatsrc}
           width={200}
           alt={displayChat}
-          className={`absolute z-10 max-w-none transform top-[-95px] ${xOffset} ${bubbleClass} ${bubbleOpacity} duration-300`}
+          className={`absolute z-10 max-w-none transform top-[-95px] ${xOffset} ${bubbleClass} ${bubbleOpacity} duration-300 z-40`}
         />
       }
     </div>

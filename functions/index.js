@@ -33,6 +33,8 @@ exports.scheduledStartCountdown = functions.pubsub
         currCrime: randomCrimeId,
         startTime: startTime,
         endTime: endTime,
+        yayCount: 0,
+        nayCount: 0,
       });
       console.log("Selected crime: ", randomCrimeId);
     } catch (error) {

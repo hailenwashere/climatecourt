@@ -16,8 +16,8 @@ export default function Courtroom() {
 
   interface Crime {
     crime: string,
-    yay: number,
-    nay: number
+    yayCount: number,
+    nayCount: number
   }
 
   const [vote, setVote] = useState<"yay" | "nay" | null>(null);
@@ -33,20 +33,14 @@ export default function Courtroom() {
 
   useEffect(() => {
     const courtroomLogicRef= ref(db, "logic");
-    onValue(courtroomLogicRef, (snapshot) => setCourtroom(snapshot.val()));
+    onValue(courtroomLogicRef, async (snapshot) => {
+      setCourtroom(snapshot.val());
+      const crimeId = snapshot.val().currCrime;
+      const crimeRef = ref(db, `crimes/${crimeId}`);
+      const crimeVal = (await get(crimeRef)).val();
+      setCrime(crimeVal);
+    });
   },[])
-
-  useEffect(() => {
-    const fetchCrime = async () => {
-      if (!courtroom || courtroom.currCrime === undefined) return;
-  
-      const crimeRef = ref(db, `crimes/${courtroom.currCrime}`);
-      const crimeSnapshot = await get(crimeRef);
-      const crimeData = crimeSnapshot.val();
-      setCrime(crimeData);
-    };
-    fetchCrime();
-  }, [courtroom]);
 
   useEffect(() => {
     // Update Firebase Realtime Database
@@ -56,6 +50,7 @@ export default function Courtroom() {
       }
       else {
         const crimeRef = ref(db, `crimes/${courtroom.currCrime}`);
+        const courtroomRef = ref(db, "logic");
         let yesIncrement = 0;
         let noIncrement = 0;
         vote === "yay" ? yesIncrement = 1 : noIncrement = 1;
@@ -66,6 +61,7 @@ export default function Courtroom() {
         }
        
         await update(crimeRef, {yayCount: increment(yesIncrement), nayCount: increment(noIncrement)});
+        await update(courtroomRef, {yayCount: increment(yesIncrement), nayCount: increment(noIncrement)});
       }
     };
     updateVotes();
@@ -84,12 +80,18 @@ export default function Courtroom() {
             </div>
           </div>
           <div className="flex flex-row justify-between items-center mb-25 w-4/5">
-            <button className={`btn text-xl ${vote === "yay" ? "btn-success" : "btn-outline"}`} onClick={() => handleVote("yay")}>
-              Yay 👍
-            </button>
-            <button className={`btn text-xl ${vote === "nay" ? "btn-error" : "btn-outline"}`} onClick={() => handleVote("nay")}>
-              Nay 👎
-            </button>
+            <div className ="flex flex-col items-center"> 
+              {crime ? `${crime.yayCount} Yays` : "Loading..."}
+              <button className={`btn text-xl ${vote === "yay" ? "btn-success" : "btn-outline"}`} onClick={() => handleVote("yay")}>
+                Yay 👍
+              </button>
+            </div>
+            <div className ="flex flex-col items-center"> 
+              {crime ? `${crime.nayCount} Nays` : "Loading..."}
+              <button className={`btn text-xl ${vote === "nay" ? "btn-error" : "btn-outline"}`} onClick={() => handleVote("nay")}>
+                Nay 👎
+              </button>
+            </div>
           </div>
         </div>
 

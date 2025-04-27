@@ -21,7 +21,7 @@ const UserAvatar : React.FC<UserAvatarProps> = ({x, y, vote, onClick}) => {
         // Reset animation after it completes
         setTimeout(() => {
             setIsJumping(false);
-        }, 1000); // Match animation duration w CSS animation
+        }, 500); // Match animation duration w CSS animation
     };
 
     // Trigger jump whenever vote changes
@@ -33,11 +33,12 @@ const UserAvatar : React.FC<UserAvatarProps> = ({x, y, vote, onClick}) => {
 
     const handleClick = () => {
         triggerJump();
+        console.log('handleCLikc!!!')
         
-        // Call the parent's onClick handler if provided?
-        if (onClick) {
-            onClick();
-        }
+        // // Call the parent's onClick handler if provided?
+        // if (onClick) {
+        //     onClick();
+        // }
     };
 
     return (

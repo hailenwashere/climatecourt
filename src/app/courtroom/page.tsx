@@ -7,6 +7,7 @@ import { db } from "@/app/lib/firebase"; // assuming you already set up firebase
 // import Image from "next/image";
 import NPCImage from "@/app/components/NpcImage";
 import UserAvatar from "@/app/components/UserAvatar";
+import { useTimer } from 'react-timer-hook';
 import usePrevious from "@/app/usePrevious";
 import { motion } from "framer-motion";
 
@@ -18,12 +19,36 @@ interface CourtroomLogic {
   nayCount: number;
 }
 export default function Courtroom() {
+  interface CourtroomLogic {
+    secondsLeft: number,
+    numPpl: number,
+    currCrime: string
+    yayCount: number,
+    nayCount: number,
+    endTime: number
+  }
+
   const [vote, setVote] = useState<"yay" | "nay" | null>(null);
   const [hasVoted, setHasVoted] = useState(false);
   const [courtroom, setCourtroom] = useState<CourtroomLogic>();
-  // const [seconds, setSeconds] = useState();
-  const [crime, setCrime] = useState<string>();
-  // const [numPpl, setNumPpl] = useState(1);
+  const [crime, setCrime] = useState<String>();
+
+  // for timer logic + judge animation trigger
+  const [isVoting, setIsVoting] = useState<boolean | null>(null)
+  const [timeNow, setTimeNow] = useState(Date.now());
+
+  // timer hook needs an expiryTime to set to
+  const expiryTimestamp = courtroom ? new Date(courtroom.endTime) : new Date();
+
+  const {
+    seconds,
+    minutes,
+    isRunning,
+    restart,
+  } = useTimer({
+    expiryTimestamp,
+    onExpire: () => setIsVoting(false),
+  });
 
   const handleVote = async (newVote: "yay" | "nay") => {
     if (newVote === vote) return;
@@ -31,12 +56,28 @@ export default function Courtroom() {
   };
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeNow(Date.now());  // forces re render every second --> ideally in a sep timer component so only the timer component is rerendered
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, []);  
+
+  useEffect(() => {
     const courtroomLogicRef = ref(db, "logic");
 
     const changeVote = onValue(courtroomLogicRef, async (snapshot) => {
       const newCourtroom = snapshot.val();
       setCourtroom(newCourtroom);
-
+      
+      if (newCourtroom?.endTime > Date.now()) { // when a new prompt comes in, reset isVoting to true
+        setIsVoting(true);
+        const newExpiry = new Date(newCourtroom.endTime); // set a newExpiry timestamp for the timer
+        restart(newExpiry, true); // true means autostrt the timer (so votes, which change the courtroom object) do not pause the timer countdown)
+      } else {
+        setIsVoting(false)
+      }
+  
       if (newCourtroom?.currCrime !== undefined) {
         const crimeRef = ref(db, `crimes/${newCourtroom.currCrime}`);
         const crimeSnapshot = await get(crimeRef);
@@ -46,6 +87,14 @@ export default function Courtroom() {
 
     return () => changeVote();
   }, []);
+
+  useEffect(() => {
+    if (courtroom?.endTime) { // when the courtroom timer changes, need to reset the timer
+      const newExpiry = new Date(courtroom.endTime);
+      restart(newExpiry, true); // restart the timer and auto start ticking
+      setIsVoting(newExpiry.getTime() > Date.now());
+    }
+  }, [courtroom?.endTime]);
 
   useEffect(() => {
     // Update Firebase Realtime Database
@@ -78,6 +127,19 @@ export default function Courtroom() {
     };
     updateVotes();
   }, [vote]);
+
+
+  // // if we want a timer bar or countdown visual
+  // function getTimeLeftPercent() {
+  //   if (!courtroom?.endTime) return 0;
+  
+  //   const totalMillis = courtroom.endTime - Date.now();
+  //   const fullDuration = courtroom.endTime - (Date.now() - (seconds + minutes*60 + hours*3600 + days*86400)*1000);
+  
+  //   return Math.max(0, (totalMillis / fullDuration) * 100);
+  // }
+  
+  // isVoting affects both the timer (between displaying timeleft and "voting has ended") AND the buttons (disabled when not isVoting)
 
   return (
     <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)]">

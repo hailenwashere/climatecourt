@@ -2,7 +2,9 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 // import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+// import { getFirestore } from "firebase/firestore";
+import { getVertexAI, getGenerativeModel } from "firebase/vertexai";
+
 
 // only edit firebase.ts. firebase.js is compiled version from the ts file
 
@@ -20,3 +22,8 @@ const app = initializeApp(firebaseConfig);
 // export const auth = getAuth(app);
 export const db = getDatabase(app);
 // export default app;
+
+const vertexAI = getVertexAI(app);
+export const model = getGenerativeModel(vertexAI, {
+  model: "gemini-2.0-flash",
+});

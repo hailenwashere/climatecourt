@@ -6,14 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
   return (
-    <div
-      className="flex items-center justify-center h-screen p-8 font-[family-name:var(--font-serif)]"
-      style={{
-        backgroundImage: "url('/paper-background.jpg')",
-        backgroundSize: "cover",
-        backgroundRepeat: "repeat",
-      }}
-    >
+    <div className="flex items-center justify-center h-screen p-8 font-[family-name:var(--font-serif)]">
       <div className="flex flex-col items-center justify-center w-2xl max-w-2/3 gap-[32px] h-full">
         <CourtTitle />
         <PlaintiffVsDefendant />

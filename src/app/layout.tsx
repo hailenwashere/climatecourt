@@ -29,7 +29,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <main>{children}</main>
+        <main>
+          <div
+            style={{
+              backgroundImage: "url('/paper-background.jpg')",
+              backgroundSize: "cover",
+              backgroundRepeat: "repeat",
+            }}
+          >
+            {children}
+          </div>
+        </main>
         <footer className="text-center py-2 italic font-serif">
           made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason
           Zhang

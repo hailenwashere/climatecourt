@@ -7,7 +7,7 @@ import React from "react";
 
 const nav = [
   { label: "home", href: "/" },
-  { label: "breaking news", href: "/news" },
+  { label: "crime board", href: "/board" },
   { label: "jury duty", href: "/courtroom" },
 ];
 

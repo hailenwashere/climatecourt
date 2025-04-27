@@ -82,9 +82,7 @@ export default function Courtroom() {
               className={`btn text-xl ${
                 vote === "nay" ? "btn-error" : "btn-outline"
               }`}
-              onClick={() => {
-                handleVote("nay");
-              }}
+              onClick={() => handleVote("nay")}
             >
               Nay 👎
             </button>

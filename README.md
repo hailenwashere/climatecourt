@@ -2,7 +2,7 @@
 
 ![Climate Court Banner](public/banner.png)
 
-> *“The number one thing we can do is the exact thing that we're not doing: talk about it.”* — **Dr. Katharine Hayhoe**
+> *“The number one thing we can do is the exact thing that we're not doing: talk about it.”* — **Dr. Katharine Hayhoe**  *(climate scientist & Chief Scientist at The Nature Conservancy)*
 
 **Climate Court** turns that conversation into an **interactive courtroom drama** where everyday choices stand trial. Confess your climate “crimes,” let a jury of peers decide your fate, and receive a verdict that’s as witty as it is thought-provoking.
 

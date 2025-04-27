@@ -76,7 +76,7 @@ const ConfessionBox = () => {
       set(ref(db, `crimes/${crimeId}`), crimeData);
       setResponse("Your climate crime has been recorded. The court will now deliberate.");
     } else {
-      setResponse("Your confession is not a valid climate crime.");
+      setResponse("Your confession is not a valid climate crime. Please try again.");
     }
     setLoading(false);
     (document.getElementById('pop-up') as HTMLDialogElement)?.showModal();
@@ -188,11 +188,12 @@ const ConfessionBox = () => {
         </div>
       </form>
       <dialog id="pop-up" className="modal">
-        <div className="modal-box">
+        <div className="modal-box pr-12 border-3 bg-shadow-2xl bg-[#F5F5F4]">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <p className="py-4">{response}</p>
+          <h3 className="font-bold text-lg bg-yellow-400 bg-auto pl-2 italic pt-1">COURT RESPONSE</h3>
+          <p className="pt-4 pb-1 pl-2">{response}</p>
         </div>
       </dialog>
     </div>

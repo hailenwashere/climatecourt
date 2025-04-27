@@ -5,11 +5,14 @@ export default function TestEnv() {
 
   const run = async () => {
     // Provide a prompt that contains text
-    const prompt = "Write a story about a magic backpack. Limit it 10 sentences. Include a character named Timmy and a dragon named Sparky. The story should be set in a forest and include a treasure map.";
+    const crime = "I shower 3 times a day for 30 minutes each.";
+    const prompt = `You are a snarky, sarcastic, and climate-conscious judge with a sense of humor. The defendant is pleading guilty for their crime \"${crime}\". The jury votes on \
+      how much they relate to this crime and ${40} percent of them agree. Generate a few sentences, referencing how this crime might affect one part of \
+      the environment with concrete and understandble facts.`;
 
     // To generate text output, call generateContent with the text input
     const result = await model.generateContent(prompt);
-    console.log('Tokens used:', result.tokensUsed); 
+    // console.log('Tokens used:', result.tokensUsed); 
 
     const response = result.response;
     const text = response.text();

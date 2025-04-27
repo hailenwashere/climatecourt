@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import styles from "./Judge.module.css";
 
 interface JudgeProps {
-    isVoting: boolean | null;
-    children: React.ReactNode;
-    className?: string;
+  isVoting: boolean | null;
+  className?: string;
 }
 
-const Judge: React.FC<JudgeProps> = ({ isVoting, children, className }) => {
+const Judge: React.FC<JudgeProps> = ({ isVoting, className }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [previousVotingState, setPreviousVotingState] = useState<boolean | null>(null);
-  
+  const [previousVotingState, setPreviousVotingState] = useState<
+    boolean | null
+  >(null);
+
   // Trigger animation when !isVoting
   useEffect(() => {
     const triggerGavelAnimation = () => {
@@ -30,19 +31,29 @@ const Judge: React.FC<JudgeProps> = ({ isVoting, children, className }) => {
     }
     setPreviousVotingState(isVoting);
   }, [isVoting, previousVotingState, isAnimating]);
-  
-  
 
   return (
-    <div 
-      className={`${styles.judgeContainer} ${isAnimating ? styles.gavelAnimation : styles.gavel} ${className || ''}`}
-      style={{
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      {children}
-    </div>
+    <>
+      {/* non-animated background to prevent flicker */}
+      <div
+        className={`${styles.gavel} ${
+          className || ""
+        } absolute top-0 max-w-none`}
+        style={{
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div
+        className={`${isAnimating ? styles.gavelAnimation : styles.gavel} ${
+          className || ""
+        } absolute top-0 max-w-none`}
+        style={{
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+    </>
   );
 };
 

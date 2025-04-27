@@ -1,33 +1,28 @@
 .judgeContainer {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.gavel {
+  background-image: url("/judge.webp");
+}
+
+.gavelAnimation {
+  animation: gavelHit 0.7s linear 3;
+  background-image: url("/judge.webp");
+}
+
+@keyframes gavelHit {
+  0% {
+    background-image: url("/judge-gavel-up.webp");
   }
-  
-  .gavel {
-    background-image: url('/judge.webp');
+  50% {
+    background-image: url("/judge-gavel-down.webp");
   }
-  
-  .gavelAnimation {
-    animation: gavelHit 1.0s linear 3;
+  100% {
+    background-image: url("/judge-gavel-up.webp");
   }
-  
-  @keyframes gavelHit {
-    0% {
-      background-image: url('/judge.webp');
-    }
-    25% {
-      background-image: url('/judge-gavel-up.webp');
-    }
-    50% {
-      background-image: url('/judge-gavel-down.webp');
-    }
-    75% {
-      background-image: url('/judge-gavel-up.webp');
-    }
-    100% {
-      background-image: url('/judge.webp');
-    }
-  }
+}

@@ -7,16 +7,16 @@ import { db } from "@/app/lib/firebase"; // assuming you already set up firebase
 // import Image from "next/image";
 import NPCImage from "@/app/components/NpcImage";
 import UserAvatar from "@/app/components/UserAvatar";
+import usePrevious from "@/app/usePrevious";
 
+interface CourtroomLogic {
+  secondsLeft: number;
+  numPpl: number;
+  currCrime: string;
+  yayCount: number;
+  nayCount: number;
+}
 export default function Courtroom() {
-  interface CourtroomLogic {
-    secondsLeft: number;
-    numPpl: number;
-    currCrime: string;
-    yayCount: number;
-    nayCount: number;
-  }
-
   const [vote, setVote] = useState<"yay" | "nay" | null>(null);
   const [hasVoted, setHasVoted] = useState(false);
   const [courtroom, setCourtroom] = useState<CourtroomLogic>();
@@ -123,18 +123,129 @@ export default function Courtroom() {
       </div>
 
       {/* Crowd */}
-      <div className="relative w-[600px] h-[300px] flex justify-center">
-        <NPCImage type="A" x={100} y={100} opacity={0.5} />
-        <NPCImage type="A" x={200} y={100} opacity={0.5} />
-        <NPCImage type="A" x={300} y={100} opacity={0.5} />
-        <NPCImage type="A" x={400} y={100} opacity={0.5} />
+      <Crowd vote={vote} courtroom={courtroom} />
 
-        <NPCImage type="A" x={50} y={50} opacity={1} />
-        <NPCImage type="A" x={150} y={50} opacity={1} />
-        <NPCImage type="A" x={250} y={50} opacity={1} />
-        <NPCImage type="A" x={350} y={50} opacity={1} />
-        <UserAvatar x={450} y={50} vote={vote} />
-      </div>
+      {/* User Avatar */}
     </div>
   );
 }
+
+const Crowd = ({
+  vote,
+  courtroom,
+}: {
+  vote: "yay" | "nay" | null;
+  courtroom: CourtroomLogic | undefined;
+}) => {
+  const [reactions, setReactions] = useState<("yay" | "nay" | "none")[]>([
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+  ]);
+
+  const prevNayCount = usePrevious(courtroom?.nayCount);
+
+  useEffect(() => {
+    if (!courtroom?.nayCount) return;
+
+    const updateReaction = (type: "yay" | "nay" | "none") => {
+      const index = Math.floor(Math.random() * reactions.length);
+      setReactions((prev) => {
+        const newReactions = [...prev];
+        newReactions[index] = type;
+        return newReactions;
+      });
+
+      setTimeout(() => {
+        setReactions((prev) => {
+          const newReactions = [...prev];
+          newReactions[index] = "none";
+          return newReactions;
+        });
+      }, 3000);
+    };
+
+    if (courtroom.nayCount > (prevNayCount ?? courtroom.nayCount)) {
+      updateReaction("nay");
+    } else if (courtroom.nayCount < (prevNayCount ?? courtroom.nayCount)) {
+      updateReaction("yay");
+    }
+  }, [courtroom?.nayCount, prevNayCount, reactions.length]);
+
+  return (
+    <div className="relative w-[600px] h-[300px] flex justify-center">
+      <NPCImage
+        key={0}
+        type="A"
+        x={100}
+        y={100}
+        opacity={0.5}
+        chatDirection="left"
+        displayChat={reactions[0]}
+      />
+      <NPCImage
+        type="A"
+        x={200}
+        y={100}
+        opacity={0.5}
+        chatDirection="left"
+        displayChat={reactions[1]}
+      />
+      <NPCImage
+        type="A"
+        x={300}
+        y={100}
+        opacity={0.5}
+        chatDirection="right"
+        displayChat={reactions[2]}
+      />
+      <NPCImage
+        type="A"
+        x={400}
+        y={100}
+        opacity={0.5}
+        chatDirection="right"
+        displayChat={reactions[3]}
+      />
+
+      <NPCImage
+        type="A"
+        x={50}
+        y={50}
+        opacity={1}
+        chatDirection="left"
+        displayChat={reactions[4]}
+      />
+      <NPCImage
+        type="A"
+        x={150}
+        y={50}
+        opacity={1}
+        chatDirection="left"
+        displayChat={reactions[5]}
+      />
+      <NPCImage
+        type="A"
+        x={250}
+        y={50}
+        opacity={1}
+        chatDirection="right"
+        displayChat={reactions[6]}
+      />
+      <NPCImage
+        type="A"
+        x={350}
+        y={50}
+        opacity={1}
+        chatDirection="right"
+        displayChat={reactions[7]}
+      />
+      <UserAvatar x={450} y={50} vote={vote} />
+    </div>
+  );
+};

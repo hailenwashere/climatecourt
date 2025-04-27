@@ -19,6 +19,28 @@ type Crime = {
 
 export default function CrimeBoard() {
   const [crimes, setCrimes] = useState<Crime[]>([]);
+  const [sortBy, setSortBy] = useState<"morality" | "total">("morality");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  const sortedCrimes = [...crimes].sort((a, b) => {
+    // define how to calculate the value based on sortBy
+    const getValue = (crime: Crime) => {
+      switch (sortBy) {
+        case "morality":
+          return (
+            (crime.yayCount / (crime.yayCount + crime.nayCount)) * 100 || 0
+          );
+        default:
+          return crime.yayCount + crime.nayCount; // assuming this is the default case
+      }
+    };
+
+    const aValue = getValue(a);
+    const bValue = getValue(b);
+
+    // apply sort direction
+    return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+  });
 
   useEffect(() => {
     const fetchCrimes = async () => {
@@ -41,14 +63,40 @@ export default function CrimeBoard() {
   }, []);
 
   return (
-    <div className="min-h-screen py-10 px-4 flex flex-col items-center ">
-      <header className="mb-6">
+    <div className="min-h-screen py-10 px-4 flex flex-col items-center gap-8 ">
+      <header>
         <h1 className="text-4xl font-bold font-serif mb-1 ">
           climate court // CRIME BOARD
         </h1>
         <p className="text-sm italic">independent, objective public shaming</p>
       </header>
-
+      <div className="flex flex-col items-end mb-6">
+        <div className="flex flex-row gap-4">
+          <span className="font-semibold">sort by</span>
+          <CustomButton
+            text="morality"
+            active={sortBy === "morality"}
+            handleClick={() => setSortBy("morality")}
+          />
+          <CustomButton
+            text="total votes"
+            active={sortBy === "total"}
+            handleClick={() => setSortBy("total")}
+          />
+        </div>
+        <div className="flex flex-row gap-4">
+          <CustomButton
+            text="asc"
+            active={sortOrder === "asc"}
+            handleClick={() => setSortOrder("asc")}
+          />
+          <CustomButton
+            text="desc"
+            active={sortOrder === "desc"}
+            handleClick={() => setSortOrder("desc")}
+          />
+        </div>
+      </div>
       <div className="grid grid-flow-row-dense gap-8 grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
         {crimes.length === 0 && (
           <>
@@ -57,7 +105,7 @@ export default function CrimeBoard() {
             ))}
           </>
         )}
-        {crimes.map((crime) => (
+        {sortedCrimes.map((crime) => (
           <StickyNote key={crime.id} crime={crime} />
         ))}
       </div>
@@ -145,5 +193,31 @@ const StickyNote = ({ crime }: { crime: Crime }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const CustomButton = ({
+  text,
+  active,
+  handleClick,
+}: {
+  text: string;
+  active: boolean;
+  handleClick: () => void;
+}) => {
+  return (
+    <span>
+      <button
+        className={`${
+          active
+            ? "underline font-bold text-secondary"
+            : "font-bold text-gray-900 opacity-70"
+        }
+        hover:cursor-pointer`}
+        onClick={handleClick}
+      >
+        {text}
+      </button>
+    </span>
   );
 };

@@ -95,6 +95,13 @@ export default function Courtroom() {
   }, [courtroom?.endTime, restart]);
 
   useEffect(() => {
+    // reset hasVoted when the courtroom changes
+    if (courtroom?.currCrime) {
+      setHasVoted(false);
+    }
+  }, [courtroom?.currCrime]);
+
+  useEffect(() => {
     // Update Firebase Realtime Database
     const updateVotes = async () => {
       if (!courtroom) {
@@ -168,9 +175,11 @@ export default function Courtroom() {
             {crime ? crime : "Loading..."}
           </div>
         </div>
-        <div className="flex flex-row justify-between items-center mb-25 w-4/5 z-10">
-          <div className="flex flex-col items-center">
-            {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
+        <div className="flex flex-row justify-between items-center mb-25 w-4/5 mt-15 z-10">
+          <div className="flex flex-col items-center gap-3">
+            <div className="relative h-8 overflow-hidden flex items-center justify-center font-bold text-4xl text-green-600">
+              {courtroom ? courtroom.yayCount : "-"}
+            </div>
             <button
               disabled={!isVoting}
               className={`btn text-xl ${
@@ -181,8 +190,10 @@ export default function Courtroom() {
               Yay 👍
             </button>
           </div>
-          <div className="flex flex-col items-center">
-            {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
+          <div className="flex flex-col items-center gap-3">
+            <div className="relative h-8 overflow-hidden flex items-center justify-center font-bold text-4xl text-red-600">
+              {courtroom ? courtroom.nayCount : "-"}
+            </div>
             <button
               disabled={!isVoting}
               className={`btn text-xl ${
@@ -239,7 +250,7 @@ const Marquee = () => {
   return (
     <div className="overflow-hidden whitespace-nowrap w-[600px] bg-red-700 py-2 px-4 flex items-center shadow-xl">
       <motion.div
-        className="inline-block text-[1.5rem] text-white font-bold tracking-wide font-sans uppercase"
+        className="inline-block text-[1.5rem] text-white font-bold tracking-wide uppercase"
         variants={tickerVariants}
         initial="animate"
         animate="animate"

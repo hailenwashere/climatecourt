@@ -163,7 +163,7 @@ export default function Courtroom() {
           backgroundImage: `url('/judge.webp')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-        }} className="w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg">
+        }} className="bg-cover bg-center w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg">
           <div className="flex flex-col items-center gap-4">
             <div className="text-3xl font-bold font-underline text-center">Today's Court Case:</div>
             <div className="italic max-w-[600px] max-h-[150px] break-words text-center">

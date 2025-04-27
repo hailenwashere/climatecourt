@@ -1,17 +1,20 @@
 "use client";
+import { db } from "@/app/lib/firebase";
+import { ref, set } from "firebase/database";
 import React, { useState, FormEvent } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
   return (
     <div
-      className="flex flex-col justify-between h-screen p-8 font-[family-name:var(--font-serif)]"
+      className="flex items-center justify-center h-screen p-8 font-[family-name:var(--font-serif)]"
       style={{
         backgroundImage: "url('/paper-background.jpg')",
         backgroundSize: "cover",
         backgroundRepeat: "repeat",
       }}
     >
-      <div className="flex flex-col items-center justify-center gap-[32px] h-full">
+      <div className="flex flex-col items-center justify-center w-2xl max-w-2/3 gap-[32px] h-full">
         <CourtTitle />
         <PlaintiffVsDefendant />
         <ConfessionBox />
@@ -21,9 +24,9 @@ export default function Home() {
 }
 const CourtTitle = () => {
   return (
-    <div className="flex flex-col gap-[8px] text-9xl italic font-extrabold text-center">
-      <div className="bg-yellow-400 px-8">CLIMATE</div>
-      <div className="bg-yellow-400 px-8">COURT</div>
+    <div className="flex flex-col gap-[8px] text-8xl italic font-extrabold w-full">
+      <div className="bg-yellow-400 px-4">CLIMATE</div>
+      <div className="bg-yellow-400 px-4">COURT</div>
     </div>
   );
 };
@@ -47,11 +50,22 @@ const PlaintiffVsDefendant = () => {
 const ConfessionBox = () => {
   const [confession, setConfession] = useState<string>("");
 
+  const crimeId = uuidv4();
+  const crimeData = {
+    id: crimeId,
+    crime: confession,
+    yayCount: 0,
+    nayCount: 0,
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!confession) return;
     alert(
       "Your climate crime has been recorded. The court will now deliberate."
     );
+    // Push the crime data to Firebase
+    set(ref(db, `crimes/${crimeId}`), crimeData);
     setConfession("");
   };
 
@@ -61,16 +75,19 @@ const ConfessionBox = () => {
         <textarea
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
-          placeholder="confess your climate crime.."
-          className="w-full p-20 min-h-[100px] border border-gray-300 rounded-lg bg-white text-2xl font-serif resize-none"
+          placeholder="confess your climate crime..."
+          className="w-full h-48 p-4 min-h-[100px] border border-gray-300 rounded-lg bg-white text-xl font-serif resize-none"
           required
         />
-        <button
-          type="submit"
-          className="btn btn-warning mt-4 mb-12 rounded-lg px-12 py-6 bg-yellow-400 text-black font-bold hover:bg-yellow-500"
-        >
-          submit to judgement
-        </button>
+        <div className="flex flex-row justify-end w-full mt-2 ">
+          <button
+            type="submit"
+            disabled={!confession}
+            className="text-red-600 disabled:text-gray-300 disabled:cursor-default italic font-semibold hover:cursor-pointer inline-block relative before:content-[''] hover:before:content-['>'] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:-translate-x-full pl-1.5"
+          >
+            submit to judgement
+          </button>
+        </div>
       </form>
     </div>
   );

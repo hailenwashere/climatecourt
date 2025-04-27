@@ -23,17 +23,17 @@ Those private negotiations inspired Climate Court—an anonymous space that swap
 
 | Stage | What happens | Tech |
 |-------|--------------|------|
-| **1 Confess** | Users anonymously submit an action & optional context. | Next.js |
+| **1 Confess** | Users anonymously submit an action (climate crime?) & optional context. | Next.js |
 | **2 Deliberate** | Community votes **Yay/Nay** in real time. | Firebase Realtime DB |
-| **3 Verdict** | A Gemini-powered judge slams the gavel and delivers a snarky ruling. | Google Gemini 1.5 Pro |
-| **4 Reflect** | Submitter sees final tallies plus resources to improve. | Firestore |
+| **3 Verdict** | A Gemini-powered judge slams the gavel and delivers a sarcastic yet funny ruling. | Google Gemini 2.0 Flash |
+| **4 Reflect** | Submitter sees final tallies plus information to improve if found guilty. | Firestore |
 
 ---
 
 ## 🛠 How We Built It
 
 ### Frontend
-* **Next.js 15** (App Router, Turbopack)  
+* **Next.js** (App Router, Turbopack)  
 * **Tailwind CSS + daisyUI**  
 * **Framer Motion** for gavel & crowd animations  
 * **React Context** for global vote state  
@@ -45,7 +45,7 @@ Those private negotiations inspired Climate Court—an anonymous space that swap
 * **Cloud Functions** (vote tally + Gemini calls)  
 
 ### AI
-* **Gemini 1.5 Pro** via Google AI Studio  
+* **Gemini 2.0 Flash** via Google AI Studio  
 * **Prompt-library** that balances snark with education  
 
 ### DevOps
@@ -58,8 +58,8 @@ Those private negotiations inspired Climate Court—an anonymous space that swap
 
 | Challenge | Solution |
 |-----------|----------|
-| Humor **vs.** education | Iterated prompts until the judge was “sassy but not savage.” |
-| Anonymous yet accountable UX | One-way hashes + vote-rate limiting |
+| Humor **vs.** education | Iterated prompts until the judge was sassy but still informative. |
+| Anonymous yet accountable UX | Server-side vote tracking + rate limiting |
 | Wildly different confession lengths | Dynamic prompt templates & Gemini context windows |
 | Animation timing | Custom React hook that triggers 3× gavel strike when `isVoting` flips |
 
@@ -67,9 +67,9 @@ Those private negotiations inspired Climate Court—an anonymous space that swap
 
 ## 🏆 Wins We’re Proud Of
 
-* **Judge with personality**—users share verdicts on socials  
-* **Live courtroom feel**—crowd sprites in sync with votes  
-* **Zero-friction onboarding**—anonymous auth = instant participation  
+* **Judge with personality**—users receive unique and witty verdicts
+* **Live courtroom feel**—crowd sprites that yay/nay in sync with votes  
+* **Zero-friction onboarding**—anonymous and instant participation  
 
 ---
 
@@ -78,7 +78,7 @@ Those private negotiations inspired Climate Court—an anonymous space that swap
 * Prompt engineering for consistent character voices  
 * Psychology of humor in climate communication  
 * Fine-grained Firebase security rules  
-* Tailwind × Framer Motion choreography  
+* Tailwind × Framer Motion choreography for animations 
 
 ---
 

@@ -9,23 +9,19 @@ interface NPCImageProps {
 }
 
 const NPCImage : React.FC<NPCImageProps> = ({type, x, y, opacity}) => {
-    let imagesrc = ""
-    if (type == "A") {
-        imagesrc = "/crowd-person1.webp"
-    } else {
-        imagesrc = "/crowd-person2.webp"
-    }
+    let imagesrc = type === "A" ? "/crowd-person1.webp" : "/crowd-person2.webp";
+    
     return (
         <div style={{
             position: "absolute",
-            top: `${y}px`,
-            left: `${x}px`,
+            bottom: y,
+            left: x
         }}>
             <Image
                 src={imagesrc}
-                width={300}
-                height={300}
-                alt="Picture of the author"
+                width={120}
+                height={120}
+                alt="crowd npc"
                 style={{
                     opacity: opacity, // 👈 50% transparent
                 }}

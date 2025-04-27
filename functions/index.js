@@ -6,9 +6,9 @@ const db = admin.database();
 
 // Pub/Sub-triggered function to start countdown and pick a random crime
 exports.scheduledStartCountdown = functions.pubsub
-  .schedule('*/2 * * * *')  // This triggers every 120 seconds
-  .onRun(async (context) => {
-    const countdownStart = 60;
+  .schedule('* * * * *')  // This triggers every 60 seconds
+  .onRun(async () => {
+    const countdownStart = 30;
     const logicRef = db.ref("logic");
     const crimesRef = db.ref("crimes");
 

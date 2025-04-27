@@ -75,7 +75,34 @@ const ConfessionBox = () => {
   };
 
   const checkConfessionWithModel = async (confession: string) => {
-    const prompt = `Your sole job is to determine if the confession is at least tangentially related to climate change. The defendant is asking a panel of viewers to vote on their confession. \n\nThe confession is: "${confession}".\n Please respond with a single word answer: "yes" or "no".\n This determines if the confession is related to the environment on some way.\n\n Here are some examples: \n\n "I leave the water on when brushing my teeth." -> "yes"\n\n "I eat meat." -> "yes"\n\n "I like to play video games." -> "no"\n\n "I shower 3 times a day for 30 minutes each." -> "yes"\n\n "I drive a car." -> "yes"\n\n "I use plastic straws." -> "yes"\n\n "I use reusable bags." -> "yes"\n\n Once again, the confession is simply something related to the environment; it can be good or bad. \n\n Please respond with a single word answer: "yes" or "no".`;
+    const prompt = `Your sole job is to determine if the confession is related to climate change or the environment in some substantial way. The defendant is asking a panel of viewers to vote on their confession.
+
+    The confession is: "${confession}". 
+
+    Please respond with a single word answer: "yes" or "no".
+
+    - "yes" means the confession is related to climate change or the environment in some way, either positively or negatively.
+    - "no" means the confession is not related to climate change or the environment.
+
+    Here are some examples of **good** confessions (climate-related):
+
+    - "I wash my jeans after a single use" -> "yes" (related to water usage, environmental impact)
+    - "I eat steak and eggs for breakfast" -> "yes" (related to meat consumption and its environmental impact)
+    - "I shower three times a day" -> "yes" (related to water usage, environmental impact)
+    - "I drive an electric car" -> "yes" (positive impact on the environment)
+    - "I compost" -> "yes" (positive impact on the environment)
+
+    Here are some **bad** examples (not related to climate change or the environment):
+
+    - "I hate La hacks" -> "no" (not related to climate change or the environment)
+    - "No" -> "no" (not a confession, and not related to the environment)
+    - "I eat a lot of candy" -> "no" (not related to climate change)
+    - "I don't like the color green" -> "no" (not related to climate change or the environment)
+    - "I sold my laptop" -> "no" (not related to climate change or the environment)
+    - "I painted my nails" -> "no" (not related to climate change or the environment)
+
+    Once again, the confession must be related to climate change or the environment in some way. It can be good or bad, but it must have some connection to environmental issues. Otherwise you will respond with no. Please respond with a single word answer: "yes" or "no"`;
+    
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
@@ -94,7 +121,7 @@ const ConfessionBox = () => {
         />
         <div className={`flex flex-row ${loading ? "justify-between" : "justify-end"} w-full mt-2`}>
           {loading && (
-            <div className="ml-5">
+            <div className="ml-5 flex flex-row items-center gap-2">
               <span>Thinking...</span>
               <div className="spinner"></div>
             </div>

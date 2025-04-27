@@ -12,6 +12,7 @@ import Judge from "@/app/components/Judge";
 import usePrevious from "@/app/usePrevious";
 import { motion } from "framer-motion";
 import Clock from "@/app/courtroom/clock";
+import Verdict from "@/app/courtroom/verdict";
 
 interface CourtroomLogic {
   secondsLeft: number;
@@ -34,9 +35,12 @@ export default function Courtroom() {
   const [hasVoted, setHasVoted] = useState(false);
   const [courtroom, setCourtroom] = useState<CourtroomLogic>();
   const [crime, setCrime] = useState<string>();
+  const [judgement, setJudgment] = useState<string>("");
+  const [innocentVerdict, setInnocentVerdict] = useState<string>("");
+  const [guiltyVerdict, setGuiltyVerdict] = useState<string>("");
 
   // for timer logic + judge animation trigger
-  const [isVoting, setIsVoting] = useState<boolean | null>(null);
+  const [isVoting, setIsVoting] = useState<boolean>(true);
   const [, setTimeNow] = useState(Date.now());
 
   // timer hook needs an expiryTime to set to
@@ -80,6 +84,9 @@ export default function Courtroom() {
         const crimeRef = ref(db, `crimes/${newCourtroom.currCrime}`);
         const crimeSnapshot = await get(crimeRef);
         setCrime(crimeSnapshot.val().crime);
+        setJudgment(crimeSnapshot.val().judgeResponse);
+        setInnocentVerdict(crimeSnapshot.val().innocentVerdict ?? "");
+        setGuiltyVerdict(crimeSnapshot.val().guiltyVerdict ?? "");
       }
     });
 
@@ -134,10 +141,27 @@ export default function Courtroom() {
     updateVotes();
   }, [vote]);
 
+  const verdict =
+    (courtroom?.yayCount ?? 0) > (courtroom?.nayCount ?? 0)
+      ? innocentVerdict
+      : guiltyVerdict;
+
   return (
     <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)] pt-24">
       {/* Card for Crime */}
       <div className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
+        <Verdict
+          title={"Judgement"}
+          text={isVoting ? "" : judgement}
+          side="left"
+          display={!isVoting}
+        />
+        <Verdict
+          title={"Verdict"}
+          text={isVoting ? "" : verdict}
+          side="right"
+          display={!isVoting}
+        />
         <Clock seconds={seconds} minutes={minutes} />
         <img
           src="/monitor.png"

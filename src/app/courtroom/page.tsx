@@ -35,9 +35,12 @@ export default function Courtroom() {
   const [hasVoted, setHasVoted] = useState(false);
   const [courtroom, setCourtroom] = useState<CourtroomLogic>();
   const [crime, setCrime] = useState<string>();
+  const [judgement, setJudgment] = useState<string>("");
+  const [innocentVerdict, setInnocentVerdict] = useState<string>("");
+  const [guiltyVerdict, setGuiltyVerdict] = useState<string>("");
 
   // for timer logic + judge animation trigger
-  const [isVoting, setIsVoting] = useState<boolean | null>(null);
+  const [isVoting, setIsVoting] = useState<boolean>(true);
   const [, setTimeNow] = useState(Date.now());
 
   // timer hook needs an expiryTime to set to
@@ -81,6 +84,9 @@ export default function Courtroom() {
         const crimeRef = ref(db, `crimes/${newCourtroom.currCrime}`);
         const crimeSnapshot = await get(crimeRef);
         setCrime(crimeSnapshot.val().crime);
+        setJudgment(crimeSnapshot.val().judgeResponse);
+        setInnocentVerdict(crimeSnapshot.val().innocentVerdict ?? "");
+        setGuiltyVerdict(crimeSnapshot.val().guiltyVerdict ?? "");
       }
     });
 
@@ -135,13 +141,26 @@ export default function Courtroom() {
     updateVotes();
   }, [vote]);
 
+  const verdict =
+    (courtroom?.yayCount ?? 0) > (courtroom?.nayCount ?? 0)
+      ? innocentVerdict
+      : guiltyVerdict;
+
   return (
     <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)] pt-24">
       {/* Card for Crime */}
       <div className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
         <Verdict
+          title={"Judgement"}
+          text={isVoting ? "" : judgement}
+          side="left"
+          display={!isVoting}
+        />
+        <Verdict
           title={"Verdict"}
-          text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+          text={isVoting ? "" : verdict}
+          side="right"
+          display={!isVoting}
         />
         <Clock seconds={seconds} minutes={minutes} />
         <img

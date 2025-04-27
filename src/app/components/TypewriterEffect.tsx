@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typewriter } from 'react-simple-typewriter';
+import React from "react";
+import { Typewriter } from "react-simple-typewriter";
 
 interface TypewriterEffectProps {
   sentences: string[];
@@ -7,29 +7,25 @@ interface TypewriterEffectProps {
   typeSpeed?: number;
   deleteSpeed?: number;
   delayBetweenSentences?: number;
-  className?: string;
 }
 
 const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
   sentences,
   loop = false,
   typeSpeed = 80,
-  deleteSpeed = 50,
-  delayBetweenSentences = 2000,
-  className = '',
+  deleteSpeed = 9999999,
+  delayBetweenSentences = 20,
 }) => {
   return (
-    <div className={className}>
-      <Typewriter
-        words={sentences}
-        loop={loop}
-        cursor
-        cursorStyle='|'
-        typeSpeed={typeSpeed}
-        deleteSpeed={deleteSpeed}
-        delaySpeed={delayBetweenSentences}
-      />
-    </div>
+    <Typewriter
+      words={sentences}
+      loop={loop}
+      cursor
+      cursorStyle="|"
+      typeSpeed={typeSpeed}
+      deleteSpeed={deleteSpeed}
+      delaySpeed={delayBetweenSentences}
+    />
   );
 };
 
@@ -40,11 +36,11 @@ const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
  */
 export function splitParagraphIntoSentences(paragraph: string): string[] {
   if (!paragraph) return [];
-  
+
   // Match sentence endings followed by space or end of string
-  return paragraph
-    .match(/[^.!?]+[.!?]+/g)
-    ?.map(sentence => sentence.trim()) || [];
+  return (
+    paragraph.match(/[^.!?]+[.!?]+/g)?.map((sentence) => sentence.trim()) || []
+  );
 }
 
 export default TypewriterEffect;

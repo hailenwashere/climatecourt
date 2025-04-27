@@ -1,16 +1,13 @@
 import React from "react";
 import Image from "next/image";
-
-interface NPCImageProps {
-    type: string,
+interface UserAvatarProps {
     x: number,
     y: number,
-    opacity: number
+    vote: string | null
 }
 
-const NPCImage : React.FC<NPCImageProps> = ({type, x, y, opacity}) => {
-    let imagesrc = type === "A" ? "/crowd-person1.webp" : "/crowd-person2.webp";
-    
+const UserAvatar : React.FC<UserAvatarProps> = ({x, y, vote}) => {
+    let imagesrc = "/user-avatar.webp"
     return (
         <div style={{
             position: "absolute",
@@ -22,12 +19,11 @@ const NPCImage : React.FC<NPCImageProps> = ({type, x, y, opacity}) => {
                 width={120}
                 height={120}
                 alt="crowd npc"
-                style={{
-                    opacity: opacity, // 👈 50% transparent
-                }}
             />
         </div>
     );
 }
+
+
  
-export default NPCImage;
+export default UserAvatar;

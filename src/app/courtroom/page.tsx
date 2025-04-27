@@ -5,7 +5,8 @@ import { DatabaseReference, getDatabase, increment, onValue, ref, set, get, upda
 // import { Crowd } from "@/components/crowd.tsx"; // or wherever you put it
 import {db} from "@/app/lib/firebase"; // assuming you already set up firebase like your earlier message
 import { snapshotEqual } from "firebase/firestore";
-import NPCImage from "../components/npcimage";
+import NPCImage from "@/app/components/NpcImage.tsx";
+import UserAvatar from "@/app/components/UserAvatar.tsx";
 
 export default function Courtroom() {
   interface CourtroomLogic {
@@ -61,7 +62,7 @@ export default function Courtroom() {
   return (
     <div className="grid grid-rows-[1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-serif)]">
       <main className="flex flex-col gap-[32px] items-center">
-        <div className="text-center flex flex-col gap-8 items-center">
+        {/* <div className="text-center flex flex-col gap-8 items-center">
           <div className="text-3xl font-bold">
             🌎 Crime:
           </div>
@@ -87,20 +88,50 @@ export default function Courtroom() {
               Nay 👎
             </button>
           </div>
+        </div> */}
+
+        <div className="bg-[url('/judge.webp')] bg-cover bg-center w-full h-[500px]">
+          <div className="text-center flex flex-col gap-5 items-center">
+            <div className="pt-10 text-3xl font-bold">
+              🌎 Crime:
+            </div>
+            <div className="text-2xl italic max-w-[600px] break-words text-center">
+              "Driving 2 minutes to the bus station every day"
+            </div>
+          </div>
+          <div className="flex gap-50 mt-100 items-center">
+              <button
+                className={`btn text-xl ${
+                  vote === "yay" ? "btn-success" : "btn-outline"
+                }`}
+                onClick={() => handleVote("yay")}
+              >
+                Yay 👍
+              </button>
+              <button
+                className={`btn text-xl ${
+                  vote === "nay" ? "btn-error" : "btn-outline"
+                }`}
+                onClick={() => handleVote("nay")}
+              >
+                Nay 👎
+              </button>
+            </div>
         </div>
-        <div>
-          <NPCImage type="A" x={500} y={500} opacity={.5}/>
-          <NPCImage type="A" x={400} y={500} opacity={.5}/>
-          <NPCImage type="A" x={600} y={500} opacity={.5}/>
-          <NPCImage type="A" x={700} y={500} opacity={.5}/>
+        
+        <div className="relative w-[600px] h-[300px] flex justify-center">
+          <NPCImage type="A" x={100} y={100} opacity={0.5} />
+          <NPCImage type="A" x={200} y={100} opacity={0.5} />
+          <NPCImage type="A" x={300} y={100} opacity={0.5} />
+          <NPCImage type="A" x={400} y={100} opacity={0.5} />
+
+          <NPCImage type="A" x={50} y={50} opacity={1} />
+          <NPCImage type="A" x={150} y={50} opacity={1} />
+          <NPCImage type="A" x={250} y={50} opacity={1} />
+          <NPCImage type="A" x={350} y={50} opacity={1} />
+          <UserAvatar x={450} y={50} vote={vote}/>
         </div>
-        <div>
-          <NPCImage type="A" x={550} y={550} opacity={1}/>
-          <NPCImage type="A" x={450} y={550} opacity={1}/>
-          <NPCImage type="A" x={350} y={550} opacity={1}/>
-          <NPCImage type="A" x={650} y={550} opacity={1}/>
-          {/* <NPCImage type="A" x={750} y={550} opacity={1}/>  */}
-        </div>
+
       </main>
       <footer className="row-start-2 text-sm">
         made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason Zhang

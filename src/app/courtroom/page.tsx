@@ -23,9 +23,11 @@ export default function Courtroom() {
   const [courtroom, setCourtroom] = useState<CourtroomLogic>();
   const [crime, setCrime] = useState<String>();
 
+  // for timer logic + judge animation trigger
   const [isVoting, setIsVoting] = useState<boolean | null>(null)
   const [timeNow, setTimeNow] = useState(Date.now());
 
+  // timer hook needs an expiryTime to set to
   const expiryTimestamp = courtroom ? new Date(courtroom.endTime) : new Date();
 
   const {
@@ -39,7 +41,6 @@ export default function Courtroom() {
     expiryTimestamp,
     onExpire: () => setIsVoting(false),
   });
-  // const [numPpl, setNumPpl] = useState(1);
 
   const handleVote = async (newVote: "yay" | "nay") => {
     if (newVote === vote) return;
@@ -48,7 +49,7 @@ export default function Courtroom() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeNow(Date.now());  // ← force React to re-render every second
+      setTimeNow(Date.now());  // forces re render every second --> ideally in a sep timer component so only the timer component is rerendered
     }, 1000);
   
     return () => clearInterval(interval);
@@ -61,10 +62,10 @@ export default function Courtroom() {
       const newCourtroom = snapshot.val();
       setCourtroom(newCourtroom);
       
-      if (newCourtroom?.endTime > Date.now()) {
+      if (newCourtroom?.endTime > Date.now()) { // when a new prompt comes in, reset isVoting to true
         setIsVoting(true);
-        const newExpiry = new Date(newCourtroom.endTime);
-        restart(newExpiry, true); 
+        const newExpiry = new Date(newCourtroom.endTime); // set a newExpiry timestamp for the timer
+        restart(newExpiry, true); // true means autostrt the timer (so votes, which change the courtroom object) do not pause the timer countdown)
       } else {
         setIsVoting(false)
       }
@@ -80,7 +81,7 @@ export default function Courtroom() {
   }, []);
 
   useEffect(() => {
-    if (courtroom?.endTime) {
+    if (courtroom?.endTime) { // when the courtroom timer changes, need to reset the timer
       const newExpiry = new Date(courtroom.endTime);
       restart(newExpiry, true); // restart the timer and auto start ticking
       setIsVoting(newExpiry.getTime() > Date.now());
@@ -121,15 +122,18 @@ export default function Courtroom() {
     updateVotes();
   }, [vote]);
 
-  function getTimeLeftPercent() {
-    if (!courtroom?.endTime) return 0;
+
+  // // if we want a timer bar or countdown visual
+  // function getTimeLeftPercent() {
+  //   if (!courtroom?.endTime) return 0;
   
-    const totalMillis = courtroom.endTime - Date.now();
-    const fullDuration = courtroom.endTime - (Date.now() - (seconds + minutes*60 + hours*3600 + days*86400)*1000);
+  //   const totalMillis = courtroom.endTime - Date.now();
+  //   const fullDuration = courtroom.endTime - (Date.now() - (seconds + minutes*60 + hours*3600 + days*86400)*1000);
   
-    return Math.max(0, (totalMillis / fullDuration) * 100);
-  }
+  //   return Math.max(0, (totalMillis / fullDuration) * 100);
+  // }
   
+  // isVoting affects both the timer (between displaying timeleft and "voting has ended") AND the buttons (disabled when not isVoting)
 
   return (
     <div className="grid grid-rows-[1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-serif)]">
@@ -142,7 +146,7 @@ export default function Courtroom() {
                   Voting ends in: {days}d {hours}h {minutes}m {seconds}s
                 </div>
 
-                {/* Animated Progress Bar
+                {/* Animated Progress Bar, buggy countdown visual
                 <div className="w-full max-w-[600px] bg-gray-300 h-4 rounded-full overflow-hidden mt-2">
                   <div
                     className="bg-green-500 h-full transition-all duration-1000 ease-linear"

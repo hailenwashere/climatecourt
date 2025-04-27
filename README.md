@@ -1,6 +1,6 @@
 # 🌎 Climate Court
 
-![Climate Court Banner](https://via.placeholder.com/1200x400?text=Climate+Court:+Judge+Your+Climate+Crimes)
+![Climate Court Banner](public/banner.png)
 
 > *“The number one thing we can do is the exact thing that we're not doing: talk about it.”* — **Dr. Katharine Hayhoe**
 

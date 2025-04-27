@@ -12,6 +12,7 @@ import Judge from "@/app/components/Judge";
 import usePrevious from "@/app/usePrevious";
 import { motion } from "framer-motion";
 import Clock from "@/app/courtroom/clock";
+import Verdict from "@/app/courtroom/verdict";
 
 interface CourtroomLogic {
   secondsLeft: number;
@@ -138,6 +139,10 @@ export default function Courtroom() {
     <div className="flex flex-col justify-center items-center h-full min-h-screen gap-16 font-[family-name:var(--font-serif)] pt-24">
       {/* Card for Crime */}
       <div className="w-[600px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg relative">
+        <Verdict
+          title={"Verdict"}
+          text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        />
         <Clock seconds={seconds} minutes={minutes} />
         <img
           src="/monitor.png"

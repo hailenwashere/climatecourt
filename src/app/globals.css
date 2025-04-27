@@ -29,5 +29,43 @@ body {
 }
 
 .clip-path-polygon {
-  clip-path: polygon(0% 0%, calc(100% - 1rem) 0%, 100% 50%, calc(100% - 1rem) 100%, 0% 100%);
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 1rem) 0%,
+    100% 50%,
+    calc(100% - 1rem) 100%,
+    0% 100%
+  );
+}
+
+@keyframes bubbleIn {
+  0% {
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bubbleOut {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+.vote-bubble-enter {
+  animation: bubbleIn 0.3s ease-out forwards;
+}
+
+.vote-bubble-exit {
+  animation: bubbleOut 0.3s ease-in forwards;
 }

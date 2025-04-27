@@ -70,20 +70,20 @@ const ConfessionBox = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mt-8 mb-8">
+    <div className="w-full max-w-2xl mt-6 mb-8">
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <textarea
           value={confession}
           onChange={(e) => setConfession(e.target.value)}
           placeholder="confess your climate crime..."
-          className="w-full h-48 p-4 min-h-[100px] border border-gray-300 rounded-lg bg-white text-xl font-serif resize-none"
+          className="w-full h-48 p-4 min-h-[100px] border rounded-sm bg-white text-xl font-serif resize-none"
           required
         />
-        <div className="flex flex-row justify-end w-full mt-2 ">
+        <div className="flex flex-row justify-end w-full mt-2">
           <button
             type="submit"
             disabled={!confession}
-            className="text-red-600 disabled:text-gray-300 disabled:cursor-default italic font-semibold hover:cursor-pointer inline-block relative before:content-[''] hover:before:content-['>'] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:-translate-x-full pl-1.5"
+            className="bg-yellow-400 font-bold clip-path-polygon italic py-2 pl-5 pr-6 disabled:text-gray-500 disabled:cursor-default disabled:bg-gray-300 disabled:transition-none disabled:translate-x-0 hover:bg-yellow-500 hover:cursor-pointer font-semibold mt-2.5 hover:translate-x-1 transition-transform duration-200 ease-in-out text-md"
           >
             submit to judgement
           </button>

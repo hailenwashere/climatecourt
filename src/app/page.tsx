@@ -83,7 +83,7 @@ const ConfessionBox = () => {
           <button
             type="submit"
             disabled={!confession}
-            className="bg-yellow-400 font-bold clip-path-polygon italic py-2 pl-5 pr-6 disabled:text-gray-500 disabled:cursor-default disabled:bg-gray-300 disabled:transition-none disabled:translate-x-0 hover:bg-yellow-500 hover:cursor-pointer font-semibold mt-2.5 hover:translate-x-1 transition-transform duration-200 ease-in-out text-md"
+            className="bg-yellow-400 clip-path-polygon italic py-2 pl-5 pr-6 disabled:text-gray-500 disabled:cursor-default disabled:bg-gray-300 disabled:transition-none disabled:translate-x-0 hover:bg-yellow-500 hover:cursor-pointer font-semibold mt-2.5 hover:translate-x-1 transition-transform duration-200 ease-in-out text-md"
           >
             submit to judgement
           </button>

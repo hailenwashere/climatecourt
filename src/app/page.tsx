@@ -133,7 +133,7 @@ const ConfessionBox = () => {
   }
 
   const generateGuiltyVerdict = async (confession: string) => {
-    const prompt = `The jury has decided that the defendant is guilty of harming the environment with their confession. Follow the following format \
+    const prompt = `The jury has decided that the defendant is guilty of harming the environment with their confession. Their confession is the following: ${confession}. Follow the following format \
     \"You've been found guilty of excessive water usage. \
     The court sentences you to a month of shorter showers! \
     Next time, remember that water conservation matters. \" \
@@ -147,7 +147,7 @@ const ConfessionBox = () => {
   }
 
   const generateInnocentVerdict = async (confession: string) => {
-    const prompt = `The jury has decided that the defendant is innocent of harming the environment with their confession. Follow the following format \
+    const prompt = `The jury has decided that the defendant is innocent of harming the environment with their confession. Their confession is the following: ${confession} Follow the following format \
     \"You've been found guilty of excessive water usage. \
     The court sentences you to a month of shorter showers! \
     Next time, remember that water conservation matters. \" \

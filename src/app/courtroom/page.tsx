@@ -262,6 +262,7 @@ const Crowd = ({
   ]);
 
   const prevNayCount = usePrevious(courtroom?.nayCount);
+  const prevYayCount = usePrevious(courtroom?.yayCount);
 
   useEffect(() => {
     if (!courtroom?.nayCount) return;
@@ -285,10 +286,17 @@ const Crowd = ({
 
     if (courtroom.nayCount > (prevNayCount ?? courtroom.nayCount)) {
       updateReaction("nay");
-    } else if (courtroom.nayCount < (prevNayCount ?? courtroom.nayCount)) {
+    }
+    if (courtroom.yayCount > (prevYayCount ?? courtroom.yayCount)) {
       updateReaction("yay");
     }
-  }, [courtroom?.nayCount, prevNayCount, reactions.length]);
+  }, [
+    courtroom?.nayCount,
+    courtroom?.yayCount,
+    prevYayCount,
+    prevNayCount,
+    reactions.length,
+  ]);
 
   return (
     <div className="relative w-[600px] h-[300px] flex justify-center">

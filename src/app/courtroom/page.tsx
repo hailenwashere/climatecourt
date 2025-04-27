@@ -50,6 +50,32 @@ export default function Courtroom() {
     onExpire: () => setIsVoting(false),
   });
 
+  const [displayYay, setDisplayYay] = useState<number>(0);
+  const [isAnimatingYay, setIsAnimatingYay] = useState(false);
+
+  const [displayNay, setDisplayNay] = useState<number>(0);
+  const [isAnimatingNay, setIsAnimatingNay] = useState(false);
+
+  useEffect(() => {
+    if (courtroom?.yayCount !== undefined && displayYay !== courtroom.yayCount) {
+      setIsAnimatingYay(true);
+      setTimeout(() => {
+        setDisplayYay(courtroom.yayCount);
+        setIsAnimatingYay(false);
+      }, 100); // how long the animation lasts
+    }
+  }, [courtroom?.yayCount, displayYay]);
+
+  useEffect(() => {
+    if (courtroom?.nayCount !== undefined && displayNay !== courtroom.nayCount) {
+      setIsAnimatingNay(true);
+      setTimeout(() => {
+        setDisplayNay(courtroom.nayCount);
+        setIsAnimatingNay(false);
+      }, 100); // how long the animation lasts
+    }
+  }, [courtroom?.nayCount, displayNay]);
+
   const handleVote = async (newVote: "yay" | "nay") => {
     if (newVote === vote) return;
     setVote(newVote);
@@ -157,9 +183,17 @@ export default function Courtroom() {
           {crime ? crime : "Loading..."}
           </div>
         </div>
-        <div className="flex flex-row justify-between items-center mb-25 w-4/5">
-          <div className="flex flex-col items-center">
-            {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
+        <div className="flex flex-row justify-between items-center mb-25 w-4/5 mt-15">
+          <div className="flex flex-col items-center gap-3">
+            <div className="relative h-8 overflow-hidden flex items-center justify-center">
+              <div
+                className={`flex flex-col transition-transform transition-opacity duration-300 ${isAnimatingYay ? "opacity-0 translate-y-8" : "opacity-100 translate-y-0"} ease-[cubic-bezier(0.34, 1.56, 0.64, 1)]`}
+              >
+                <div className="h-8 flex items-center justify-center font-bold text-5xl text-green-600">
+                  {courtroom ? displayYay : "-"}
+                </div>
+              </div>
+            </div>
             <button
               className={`btn text-xl ${
                 vote === "yay" ? "btn-success" : "btn-outline"
@@ -169,8 +203,16 @@ export default function Courtroom() {
               Yay 👍
             </button>
           </div>
-          <div className="flex flex-col items-center">
-            {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
+          <div className="flex flex-col items-center gap-3">
+            <div className="relative h-8 overflow-hidden flex items-center justify-center">
+              <div
+                className={`flex flex-col transition-transform transition-opacity duration-300 ${isAnimatingNay ? "opacity-0 translate-y-8" : "opacity-100 translate-y-0"} ease-[cubic-bezier(0.34, 1.56, 0.64, 1)]`}
+              >
+                <div className="h-8 flex items-center justify-center font-bold text-5xl text-red-600">
+                  {courtroom ? displayNay : "-"}
+                </div>
+              </div>
+            </div>
             <button
               className={`btn text-xl ${
                 vote === "nay" ? "btn-error" : "btn-outline"

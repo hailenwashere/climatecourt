@@ -7,6 +7,7 @@ import {db} from "@/app/lib/firebase"; // assuming you already set up firebase l
 import NPCImage from "@/app/components/NpcImage";
 import UserAvatar from "@/app/components/UserAvatar";
 import { useTimer } from 'react-timer-hook';
+import Judge from "@/app/components/Judge";
 
 export default function Courtroom() {
   interface CourtroomLogic {
@@ -142,7 +143,7 @@ export default function Courtroom() {
                   Voting ends in: {days}d {hours}h {minutes}m {seconds}s
                 </div>
 
-                {/* Animated Progress Bar
+                {/*Animated Progress Bar
                 <div className="w-full max-w-[600px] bg-gray-300 h-4 rounded-full overflow-hidden mt-2">
                   <div
                     className="bg-green-500 h-full transition-all duration-1000 ease-linear"
@@ -157,34 +158,47 @@ export default function Courtroom() {
             )}
           </div>
         )}
-        
+
         {/* Card for Crime */}
-        <div style={{
-          backgroundImage: `url('/judge.webp')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }} className="bg-cover bg-center w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg">
+        <Judge
+          isVoting={isVoting}
+          className="w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg"
+        >
           <div className="flex flex-col items-center gap-4">
-            <div className="text-3xl font-bold font-underline text-center">Today's Court Case:</div>
+            <div className="text-3xl font-bold font-underline text-center">
+              Today&apos;s Court Case:
+            </div>
             <div className="italic max-w-[600px] max-h-[150px] break-words text-center">
               {crime ? crime : "Loading..."}
             </div>
           </div>
           <div className="flex flex-row justify-between items-center mb-25 w-4/5">
-            <div className ="flex flex-col items-center"> 
+            <div className="flex flex-col items-center">
               {courtroom ? `${courtroom.yayCount} Yays` : "Loading..."}
-              <button disabled={!isVoting} className={`btn text-xl ${vote === "yay" ? "btn-success" : "btn-outline"}`} onClick={() => handleVote("yay")}>
+              <button
+                disabled={!isVoting}
+                className={`btn text-xl ${
+                  vote === "yay" ? "btn-success" : "btn-outline"
+                }`}
+                onClick={() => handleVote("yay")}
+              >
                 Yay 👍
               </button>
             </div>
-            <div className ="flex flex-col items-center"> 
+            <div className="flex flex-col items-center">
               {courtroom ? `${courtroom.nayCount} Nays` : "Loading..."}
-              <button disabled={!isVoting} className={`btn text-xl ${vote === "nay" ? "btn-error" : "btn-outline"}`} onClick={() => handleVote("nay")}>
+              <button
+                disabled={!isVoting}
+                className={`btn text-xl ${
+                  vote === "nay" ? "btn-error" : "btn-outline"
+                }`}
+                onClick={() => handleVote("nay")}
+              >
                 Nay 👎
               </button>
             </div>
           </div>
-        </div>
+        </Judge>
 
         {/* Crowd */}
         <div className="relative w-[600px] h-[300px] flex justify-center">
@@ -197,13 +211,13 @@ export default function Courtroom() {
           <NPCImage type="A" x={150} y={50} opacity={1} />
           <NPCImage type="A" x={250} y={50} opacity={1} />
           <NPCImage type="A" x={350} y={50} opacity={1} />
-          <UserAvatar x={450} y={50} vote={vote}/>
+          <UserAvatar x={450} y={50} vote={vote} />
         </div>
-
       </main>
 
       <footer className="row-start-2 text-sm">
-        made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason Zhang
+        made at LA Hacks 2025 by Helen Feng, Andrew Wang, Grace Yan, and Jason
+        Zhang
       </footer>
     </div>
   );

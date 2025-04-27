@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { increment, onValue, ref, get, update } from "firebase/database";
 import { db } from "@/app/lib/firebase"; // assuming you already set up firebase like your earlier message
 // import Image from "next/image";
 import NPCImage from "@/app/components/NpcImage";
 import UserAvatar from "@/app/components/UserAvatar";
 import usePrevious from "@/app/usePrevious";
+import { motion } from "framer-motion";
 
 interface CourtroomLogic {
   secondsLeft: number;
@@ -86,14 +87,12 @@ export default function Courtroom() {
           src="/monitor.png"
           alt="Monitor"
           width="670px"
-          className="max-w-none absolute left-1/2 -top-4 transform -translate-x-1/2 pointer-events-none"
+          className="max-w-none absolute left-1/2 -top-4 transform -translate-x-1/2 pointer-events-none z-10"
         />
         <div className="flex flex-col items-center gap-4">
-          <div className="text-3xl font-bold font-underline text-center w-[600px] bg-red-500 text-white rounded-lg p-2 font-sans whitespace-nowrap">
-            Is This Moral in our Current Climate Catastrophe?
-          </div>
-          <div className="italic max-w-[600px] max-h-[150px] break-words text-center">
-            {crime ? crime : "Loading..."}
+          <Marquee />
+        <div className="max-w-[600px] max-h-[150px] text-center text-gray-800 text-2xl font-serif leading-relaxed border-b pb-2">
+          {crime ? crime : "Loading..."}
           </div>
         </div>
         <div className="flex flex-row justify-between items-center mb-25 w-4/5">
@@ -128,6 +127,58 @@ export default function Courtroom() {
       {/* User Avatar */}
     </div>
   );
+}
+
+const Marquee = () => {
+	const [textWidth, setTextWidth] = useState<number>(0);
+	const text = `Is this moral in our current climate catastrophe? \xa0`;
+	const repeatTimes = 8;
+	const repeatedText = Array(repeatTimes).fill(text).join(" ");
+
+	const textRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		if (textRef.current) {
+			setTextWidth(textRef.current.offsetWidth);
+		}
+	}, [textRef]);
+
+	const tickerVariants = {
+		animate: {
+			x: [0, -textWidth],
+			transition: {
+				x: {
+					duration: 40,
+					repeat: Infinity,
+					repeatType: "loop",
+					ease: "linear"
+				}
+			}
+		}
+	};
+
+	return (
+    <div className="overflow-hidden whitespace-nowrap w-[600px] bg-red-700 py-2 px-4 flex items-center shadow-xl">
+      <motion.div
+        className="inline-block text-[1.5rem] text-white font-bold tracking-wide font-sans uppercase"
+        variants={tickerVariants}
+        initial="animate"
+        animate="animate"
+        ref={textRef}
+      >
+        {repeatedText}
+      </motion.div>
+      <motion.div
+        className="inline-block text-[1.5rem] text-white font-bold tracking-wide font-sans uppercase"
+        variants={tickerVariants}
+        initial="animate"
+        animate="animate"
+      >
+        {repeatedText}
+      </motion.div>
+    </div>
+  );
+  
 }
 
 const Crowd = ({

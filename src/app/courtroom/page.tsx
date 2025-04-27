@@ -182,12 +182,10 @@ export default function Courtroom() {
             </div>
             <button
               disabled={!isVoting}
-              className={`btn text-xl ${
-                vote === "yay" ? "btn-success" : "btn-outline"
-              }`}
+              className="btn text-xl bg-yellow-400"
               onClick={() => handleVote("yay")}
             >
-              Yay 👍
+              Yay
             </button>
           </div>
           <div className="flex flex-col items-center gap-3">
@@ -196,12 +194,10 @@ export default function Courtroom() {
             </div>
             <button
               disabled={!isVoting}
-              className={`btn text-xl ${
-                vote === "nay" ? "btn-error" : "btn-outline"
-              }`}
+              className="btn text-xl bg-yellow-400"
               onClick={() => handleVote("nay")}
             >
-              Nay 👎
+              Nay
             </button>
           </div>
         </div>
@@ -248,7 +244,7 @@ const Marquee = () => {
   };
 
   return (
-    <div className="overflow-hidden whitespace-nowrap w-[600px] bg-red-700 py-2 px-4 flex items-center shadow-xl">
+    <div className="overflow-hidden whitespace-nowrap w-[600px] bg-yellow-600 py-1 px-4 flex items-center shadow-xl">
       <motion.div
         className="inline-block text-[1.5rem] text-white font-bold tracking-wide uppercase"
         variants={tickerVariants}
@@ -259,7 +255,7 @@ const Marquee = () => {
         {repeatedText}
       </motion.div>
       <motion.div
-        className="inline-block text-[1.5rem] text-white font-bold tracking-wide font-sans uppercase"
+        className="inline-block text-[1.5rem] text-white font-bold tracking-wide uppercase"
         variants={tickerVariants}
         initial="animate"
         animate="animate"

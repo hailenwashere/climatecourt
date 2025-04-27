@@ -8,6 +8,7 @@ import { db } from "@/app/lib/firebase"; // assuming you already set up firebase
 import NPCImage from "@/app/components/NpcImage";
 import UserAvatar from "@/app/components/UserAvatar";
 import { useTimer } from 'react-timer-hook';
+import Judge from "@/app/components/Judge";
 import usePrevious from "@/app/usePrevious";
 import { motion } from "framer-motion";
 
@@ -156,6 +157,10 @@ export default function Courtroom() {
           </div>
         )}
       </div>
+      <Judge
+          isVoting={isVoting}
+          className="w-full max-w-[700px] h-[400px] flex flex-col justify-between items-center p-8 rounded-lg shadow-lg"
+      >
       {/* Card for Crime */}
       <div style={{
           backgroundImage: `url('/judge.webp')`,
